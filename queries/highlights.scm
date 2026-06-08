@@ -21,6 +21,9 @@
 ; Set
 (SetN) @type.builtin
 
+; Prop
+(PropN) @type.builtin
+
 
 ;; Imports and Module Declarations
 
@@ -63,8 +66,6 @@
   "∀"
   "->"
   "→"
-  "\\"
-  "λ"
   "..."
   "…"
 ] @keyword

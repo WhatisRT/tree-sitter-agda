@@ -13,12 +13,29 @@ open import Level
 ---
 
 (source_file
-    (module (module_name (qid)))
-    (open (import (module_name (qid))))
-    (open (import (module_name (qid))))
-    (open (import (module_name (qid))))
-    (open (import (module_name (qid))))
-    (open (import (module_name (qid)))))
+  (module
+    (module_name
+      (qid)))
+  (open
+    (import
+      (module_name
+        (qid))))
+  (open
+    (import
+      (module_name
+        (qid))))
+  (open
+    (import
+      (module_name
+        (qid))))
+  (open
+    (import
+      (module_name
+        (qid))))
+  (open
+    (import
+      (module_name
+        (qid)))))
 
 ==================
 semigroups
@@ -39,24 +56,74 @@ record Semigroup c ℓ : Set (suc (c ⊔ ℓ)) where
 ---
 
 (source_file
-    (comment)
-    (record
-        (record_name (qid))
-            (untyped_binding (bid))
-            (untyped_binding (bid))
-            (expr (atom (SetN
-                (atom (expr (atom (qid))
+  (comment)
+  (record
+    (record_name
+      (qid))
+    (untyped_binding
+      (bid))
+    (untyped_binding
+      (bid))
+    (expr
+      (atom
+        (SetN
+          (atom
+            (expr
+              (atom
+                (qid))
+              (atom
+                (expr
+                  (atom
+                    (qid))
+                  (atom
+                    (qid))
+                  (atom
+                    (qid)))))))))
+    (record_declarations_block
+      (infix
+        (fixity
+          (integer))
+        (bid))
+      (infix
+        (fixity
+          (integer))
+        (bid))
+      (fields
+        (signature
+          (field_name)
+          (expr
+            (atom
+              (SetN
                 (atom
-                  (expr
-                    (atom (qid))
-                    (atom (qid))
-                    (atom (qid)))))))))
-        (record_declarations_block
-            (infix (integer) (bid))
-            (infix (integer) (bid))
-            (fields
-                (signature (field_name) (expr (atom (SetN (atom (qid))))))
-                (signature (field_name) (expr        (atom (qid)) (atom (qid)) (atom (qid))))
-                (signature (field_name) (expr        (atom (qid)) (atom (qid))))
-                (signature (field_name) (expr        (atom (qid)) (atom (qid)) (atom (qid)))))
-            (open (module_name (qid)) (atom (qid)) (import_directive)))))
+                  (qid))))))
+        (signature
+          (field_name)
+          (expr
+            (atom
+              (qid))
+            (atom
+              (qid))
+            (atom
+              (qid))))
+        (signature
+          (field_name)
+          (expr
+            (atom
+              (qid))
+            (atom
+              (qid))))
+        (signature
+          (field_name)
+          (expr
+            (atom
+              (qid))
+            (atom
+              (qid))
+            (atom
+              (qid)))))
+      (open
+        (module_name
+          (qid))
+        (atom
+          (qid))
+        (import_directive)))))

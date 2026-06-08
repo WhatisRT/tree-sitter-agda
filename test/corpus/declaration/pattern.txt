@@ -12,3 +12,59 @@ pattern ss x = suc (suc x)
       (expr (atom (qid))))
     (pattern (id) (untyped_binding (bid))
       (expr (atom (qid)) (atom (expr (atom (qid)) (atom (qid)))))))
+
+==================
+As-pattern in domain-free binder
+==================
+
+f (x@p) = x
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid))
+      (atom
+        (expr
+          (atom
+            (as_pattern
+              (id)
+              (atom
+                (qid)))))))
+    (rhs
+      (expr
+        (atom
+          (qid))))))
+
+==================
+As-pattern with constructor pattern
+==================
+
+f (xs@(y ∷ ys)) = xs
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid))
+      (atom
+        (expr
+          (atom
+            (as_pattern
+              (id)
+              (atom
+                (expr
+                  (atom
+                    (qid))
+                  (atom
+                    (qid))
+                  (atom
+                    (qid)))))))))
+    (rhs
+      (expr
+        (atom
+          (qid))))))

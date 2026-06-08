@@ -8,14 +8,39 @@ f = do
 ---
 
 (source_file
-    (function
-        (lhs
-            (atom (qid)))
-        (rhs
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (do
+          (stmt
+            (atom
+              (qid))
             (expr
-                (do
-                    (stmt (atom (qid)) (atom (qid)) (atom (qid)))
-                    (stmt (atom (qid))))))))
+              (atom
+                (qid))))
+          (stmt
+            (atom
+              (qid))))))))
+
+==================
+Bind missing rhs is rejected
+==================
+
+f = do
+    x ←
+
+---
+
+(source_file
+  (ERROR
+    (lhs
+      (atom
+        (qid)))
+    (atom
+      (qid))))
 
 ==================
 Pattern bind
@@ -28,21 +53,29 @@ f = do
 ---
 
 (source_file
-    (function
-        (lhs
-            (atom (qid)))
-        (rhs
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (do
+          (stmt
+            (atom
+              (qid))
             (expr
-                (do
-                    (stmt
-                        (atom (qid))
-                        (atom (qid))
-                        (atom (qid)))
-                        (do_where
-                            (lambda_clause
-                                (atom (qid))
-                                (expr (atom (qid)))))
-                    (stmt (atom (qid))))))))
+              (atom
+                (qid))))
+          (do_where
+            (lambda_clause
+              (atom
+                (qid))
+              (expr
+                (atom
+                  (qid)))))
+          (stmt
+            (atom
+              (qid))))))))
 
 ==================
 Non-binding statement
@@ -52,14 +85,19 @@ f = do m
 ---
 
 (source_file
-    (function
-        (lhs
-            (atom (qid)))
-        (rhs
-            (expr
-                (do
-                    (stmt (atom (qid)))
-                    (stmt (atom (qid))))))))
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (do
+          (stmt
+            (atom
+              (qid)))
+          (stmt
+            (atom
+              (qid))))))))
 
 ==================
 Nested
@@ -73,17 +111,27 @@ f = do
 ---
 
 (source_file
-    (function
-        (lhs
-            (atom (qid)))
-        (rhs
-            (expr
-                (do
-                    (stmt (atom (qid)))
-                    (stmt (do
-                        (stmt (atom (qid)))
-                        (stmt (atom (qid)))))
-                    (stmt (atom (qid))))))))
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (do
+          (stmt
+            (atom
+              (qid)))
+          (stmt
+            (do
+              (stmt
+                (atom
+                  (qid)))
+              (stmt
+                (atom
+                  (qid)))))
+          (stmt
+            (atom
+              (qid))))))))
 
 ==================
 Let binding (Single line)
@@ -94,17 +142,26 @@ f = do
 ---
 
 (source_file
-    (function
-        (lhs
-            (atom (qid)))
-        (rhs
-            (expr
-                (do
-                    (stmt (let
-                        (function
-                            (lhs (atom (qid)))
-                            (rhs (expr (atom (qid)))))))
-                    (stmt (atom (qid))))))))
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (do
+          (stmt
+            (let
+              (function
+                (lhs
+                  (atom
+                    (qid)))
+                (rhs
+                  (expr
+                    (atom
+                      (qid)))))))
+          (stmt
+            (atom
+              (qid))))))))
 
 ==================
 Let binding (Multiline)
@@ -117,17 +174,422 @@ f = do
 ---
 
 (source_file
-    (function
-        (lhs
-            (atom (qid)))
-        (rhs
-            (expr
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (do
+          (stmt
+            (let
+              (function
+                (lhs
+                  (atom
+                    (qid)))
+                (rhs
+                  (expr
+                    (atom
+                      (qid)))))
+              (function
+                (lhs
+                  (atom
+                    (qid)))
+                (rhs
+                  (expr
+                    (atom
+                      (qid)))))))
+          (stmt
+            (atom
+              (qid))))))))
+
+==================
+Where clause after do block
+==================
+
+f = do
+  x
+  y
+  where
+  z = w
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (do
+          (stmt (atom (qid)))
+          (stmt (atom (qid))))))
+    (where
+      (function
+        (lhs (atom (qid)))
+        (rhs (expr (atom (qid))))))))
+
+==================
+Do block inside parens with closing paren on same line as last statement
+==================
+
+f = g (do
+  x ← h
+  pure x ) y
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (atom (qid))
+        (atom
+          (expr
+            (do
+              (stmt pattern: (atom (qid)) rhs: (expr (atom (qid))))
+              (stmt (atom (qid)) (atom (qid))))))
+        (atom (qid))))))
+
+==================
+Lambda-where with do body inside parens
+==================
+
+f = g (λ where x → do
+  vd ← h x
+  just vd ) y
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (atom (qid))
+        (atom
+          (expr
+            (lambda
+              (lambda_clause
+                (atom (qid))
+                (expr
+                  (do
+                    (stmt pattern: (atom (qid)) rhs: (expr (atom (qid)) (atom (qid))))
+                    (stmt (atom (qid)) (atom (qid)))))))))
+        (atom (qid))))))
+
+==================
+Inline do block after let-in does not truncate
+==================
+
+module T where
+
+test2 k = let x = k
+          in do y ← pure x
+                pure y
+
+test3 k = do y ← pure k
+             pure y
+
+---
+
+(source_file
+  (module
+    (module_name (qid)))
+  (function
+    (lhs (atom (qid)) (atom (qid)))
+    (rhs
+      (expr
+        (let
+          (function
+            (lhs (atom (qid)))
+            (rhs (expr (atom (qid)))))
+          (expr
+            (do
+              (stmt pattern: (atom (qid)) rhs: (expr (atom (qid)) (atom (qid))))
+              (stmt (atom (qid)) (atom (qid)))))))))
+  (function
+    (lhs (atom (qid)) (atom (qid)))
+    (rhs
+      (expr
+        (do
+          (stmt pattern: (atom (qid)) rhs: (expr (atom (qid)) (atom (qid))))
+          (stmt (atom (qid)) (atom (qid))))))))
+
+==================
+Nested do-do with let-in body
+==================
+
+module T where
+test = let x = do y do
+  h x
+  in x
+
+---
+
+(source_file
+  (module (module_name (qid)))
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (let
+          (function
+            (lhs (atom (qid)))
+            (rhs
+              (expr
                 (do
-                    (stmt (let
-                        (function
-                            (lhs (atom (qid)))
-                            (rhs (expr (atom (qid)))))
-                        (function
-                            (lhs (atom (qid)))
-                            (rhs (expr (atom (qid)))))))
-                    (stmt (atom (qid))))))))
+                  (stmt
+                    (atom (qid))
+                    (do
+                      (stmt (atom (qid)) (atom (qid))))))))) 
+          (expr (atom (qid))))))))
+
+==================
+Nested do-do with let-in body and multi-stmt inner do
+==================
+
+module T where
+test = let x = do f "match" do
+  h x
+  i y
+  in by test
+
+---
+
+(source_file
+  (module (module_name (qid)))
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (let
+          (function
+            (lhs (atom (qid)))
+            (rhs
+              (expr
+                (do
+                  (stmt
+                    (atom (qid))
+                    (atom (literal (string)))
+                    (do
+                      (stmt (atom (qid)) (atom (qid)))
+                      (stmt (atom (qid)) (atom (qid))))))))) 
+          (expr (atom (qid)) (atom (qid))))))))
+
+==================
+Let as do-statement with case-of-λ-where (clauses deeper than binding)
+==================
+
+f = do
+  x ← m
+  let symErr = case t of λ where
+        yes → a
+        no → b
+  next x
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (do
+          (stmt
+            (atom (qid))
+            (expr (atom (qid))))
+          (stmt
+            (let
+              (function
+                (lhs (atom (qid)))
+                (rhs
+                  (expr
+                    (atom (qid))
+                    (atom (qid))
+                    (atom (qid))
+                    (lambda
+                      (lambda_clause (atom (qid)) (expr (atom (qid))))
+                      (lambda_clause (atom (qid)) (expr (atom (qid))))))))))
+          (stmt
+            (atom (qid))
+            (atom (qid))))))))
+
+==================
+Do block with lambda-where last statement closed by paren
+==================
+
+f = g (do
+  caseM a λ where
+    true → x
+    false → y)
+  h
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (atom (qid))
+        (atom
+          (expr
+            (do
+              (stmt
+                (atom (qid))
+                (atom (qid))
+                (lambda
+                  (lambda_clause (atom (qid)) (expr (atom (qid))))
+                  (lambda_clause (atom (qid)) (expr (atom (qid)))))))))
+        (atom (qid))))))
+
+==================
+Inline do block ending in lambda-where closed by sibling declaration
+==================
+
+f = do caseM ma λ where
+  a → p
+  b → q
+g = z
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (do
+          (stmt
+            (atom (qid))
+            (atom (qid))
+            (lambda
+              (lambda_clause (atom (qid)) (expr (atom (qid))))
+              (lambda_clause (atom (qid)) (expr (atom (qid))))))))))
+  (function
+    (lhs (atom (qid)))
+    (rhs (expr (atom (qid))))))
+
+==================
+Inline do with bind-applied lambda-where closed by sibling
+==================
+
+f = m do e >>= λ where
+  a → p
+  b → q
+g = z
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (atom (qid))
+        (do
+          (stmt
+            (atom (qid))
+            (atom (qid))
+            (lambda
+              (lambda_clause (atom (qid)) (expr (atom (qid))))
+              (lambda_clause (atom (qid)) (expr (atom (qid))))))))))
+  (function
+    (lhs (atom (qid)))
+    (rhs (expr (atom (qid))))))
+
+==================
+Inline do with semicolon stmt then case-of lambda-where closed by sibling
+==================
+
+f = m do x ← e; case x of λ where
+  a → p
+  b → q
+g = z
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (atom (qid))
+        (do
+          (stmt
+            pattern: (atom (qid))
+            rhs: (expr (atom (qid))))
+          (stmt
+            (atom (qid))
+            (atom (qid))
+            (atom (qid))
+            (lambda
+              (lambda_clause (atom (qid)) (expr (atom (qid))))
+              (lambda_clause (atom (qid)) (expr (atom (qid))))))))))
+  (function
+    (lhs (atom (qid)))
+    (rhs (expr (atom (qid))))))
+
+==================
+Paren do block whose last statement is a brace lambda closed by brace-paren
+==================
+
+f = g (do
+  s q
+  case x of λ { a → b })
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (atom (qid))
+        (atom
+          (expr
+            (do
+              (stmt (atom (qid)) (atom (qid)))
+              (stmt
+                (atom (qid))
+                (atom (qid))
+                (atom (qid))
+                (lambda
+                  (lambda_clause (atom (qid)) (expr (atom (qid)))))))))))))
+
+==================
+Do block ending in case-of lambda-where followed by function where-clause
+==================
+
+f s = do
+  case h y of λ where
+    a → r
+    b → e
+  where
+    g : T
+    g x = x
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)) (atom (qid)))
+    (rhs
+      (expr
+        (do
+          (stmt
+            (atom (qid))
+            (atom (qid))
+            (atom (qid))
+            (atom (qid))
+            (lambda
+              (lambda_clause (atom (qid)) (expr (atom (qid))))
+              (lambda_clause (atom (qid)) (expr (atom (qid)))))))))
+    (where
+      (function
+        (lhs (function_name (atom (qid))))
+        (rhs (expr (atom (qid)))))
+      (function
+        (lhs (atom (qid)) (atom (qid)))
+        (rhs (expr (atom (qid))))))))

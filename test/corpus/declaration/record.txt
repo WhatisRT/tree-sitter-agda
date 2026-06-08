@@ -89,3 +89,530 @@ record Pair (A B : Set) : Set where
                 (function
                     (lhs (atom (qid)))
                     (rhs (expr (atom (qid)))))))))
+
+==================
+Multiline telescope with private block and field
+==================
+
+record R (A : T)
+         (B : U) : S where
+  private
+    module M = X
+  field
+    f : A
+
+---
+
+(source_file
+  (record
+    (record_name (qid))
+    (typed_binding (atom (qid)) (expr (atom (qid))))
+    (typed_binding (atom (qid)) (expr (atom (qid))))
+    (expr (atom (qid)))
+    (record_declarations_block
+      (private
+        (module_macro
+          (module_name (qid))
+          (module_application (module_name (qid)))))
+      (fields
+        (signature
+          (field_name)
+          (expr (atom (qid))))))))
+
+==================
+Empty record body
+==================
+
+record Empty : Set where
+
+---
+
+(source_file
+  (record
+    (record_name (qid))
+    (expr (atom (SetN)))
+    (record_declarations_block)))
+
+==================
+Record where field on same line as where keyword
+==================
+
+record R : T where field
+    x : T
+    y : T
+
+---
+
+(source_file
+    (record
+        (record_name (qid))
+        (expr (atom (qid)))
+        (record_declarations_block
+            (fields
+                (signature (field_name) (expr (atom (qid))))
+                (signature (field_name) (expr (atom (qid))))))))
+
+==================
+Copattern field assignment (dot-field arrow) in record expression
+==================
+
+f = record { .fst → a ; .snd → b }
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (atom
+          (record_assignments
+            (field_assignment (field_name) (expr (atom (qid))))
+            (field_assignment (field_name) (expr (atom (qid))))))))))
+
+==================
+Copattern record expression with where clause
+==================
+
+f = record
+  { .updateGroups → modifiedUpdateGroups
+  ; .applyUpdate  → applyPParamsUpdate
+  }
+  where
+    modifiedUpdateGroups = x
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (atom
+          (record_assignments
+            (field_assignment (field_name) (expr (atom (qid))))
+            (field_assignment (field_name) (expr (atom (qid))))))))
+    (where
+      (function
+        (lhs (atom (qid)))
+        (rhs (expr (atom (qid))))))))
+
+==================
+Semicolon-chained record directives
+==================
+
+record Wrap (A : Set) : Set where
+  constructor wrap; no-eta-equality; pattern
+  field unwrap : A
+
+---
+
+(source_file
+  (record
+    (record_name (qid))
+    (typed_binding
+      (atom (qid))
+      (expr (atom (SetN))))
+    (expr (atom (SetN)))
+    (record_declarations_block
+      (record_constructor (id))
+      (record_eta)
+      (record_pattern)
+      (fields
+        (signature
+          (field_name)
+          (expr (atom (qid))))))))
+
+==================
+Semicolon-chained directives (all types)
+==================
+
+record P (A B : Set) : Set where
+  inductive; no-eta-equality; pattern; constructor _,_
+
+---
+
+(source_file
+  (record
+    (record_name (qid))
+    (typed_binding
+      (atom (qid))
+      (atom (qid))
+      (expr (atom (SetN))))
+    (expr (atom (SetN)))
+    (record_declarations_block
+      (record_induction)
+      (record_eta)
+      (record_pattern)
+      (record_constructor (id)))))
+
+==================
+Erased record (@0)
+==================
+
+record @0 R : Set where
+
+---
+
+(source_file
+  (record
+    (attributes (attribute (qid)))
+    (record_name (qid))
+    (expr (atom (SetN)))
+    (record_declarations_block)))
+
+==================
+Erased record signature (@0)
+==================
+
+record @0 R : Set
+
+---
+
+(source_file
+  (record_signature
+    (attributes (attribute (qid)))
+    (record_name (qid))
+    (expr (atom (SetN)))))
+
+==================
+record with operator-character binding names in telescope
+==================
+
+module T where
+record IsR (+ * : Op₂ A) (- : Op₁ A) (0# : A) : Set where
+  field
+    f : T
+
+---
+
+(source_file
+  (module (module_name (qid)))
+  (record
+    (record_name (qid))
+    (typed_binding
+      (atom (qid))
+      (atom (qid))
+      (expr (atom (qid)) (atom (qid))))
+    (typed_binding
+      (atom (qid))
+      (expr (atom (qid)) (atom (qid))))
+    (typed_binding
+      (atom (qid))
+      (expr (atom (qid))))
+    (expr (atom (SetN)))
+    (record_declarations_block
+      (fields
+        (signature
+          (field_name)
+          (expr (atom (qid))))))))
+
+==================
+Semicolon-separated declarations in record body
+==================
+
+record R : Set where
+  g = b; h = c
+
+---
+
+(source_file
+  (record
+    (record_name (qid))
+    (expr (atom (SetN)))
+    (record_declarations_block
+      (function
+        (lhs (atom (qid)))
+        (rhs (expr (atom (qid)))))
+      (function
+        (lhs (atom (qid)))
+        (rhs (expr (atom (qid))))))))
+
+==================
+Record with type params where field on same line
+==================
+
+record SafetySpec (Block : Type) (Network : Channel) : Type where field
+    honest-node-spec : Machine Network
+    spec-id          : ℕ
+
+---
+
+(source_file
+  (record
+    (record_name
+      (qid))
+    (typed_binding
+      (atom
+        (qid))
+      (expr
+        (atom
+          (qid))))
+    (typed_binding
+      (atom
+        (qid))
+      (expr
+        (atom
+          (qid))))
+    (expr
+      (atom
+        (qid)))
+    (record_declarations_block
+      (fields
+        (signature
+          (field_name)
+          (expr
+            (atom
+              (qid))
+            (atom
+              (qid))))
+        (signature
+          (field_name)
+          (expr
+            (atom
+              (qid))))))))
+
+==================
+raw monoid
+==================
+
+-- A raw monoid is a monoid without any laws.
+
+record RawMonoid c ℓ : Set (suc (c ⊔ ℓ)) where
+  infixl 7 _∙_
+  infix  4 _≈_
+  field
+    Carrier : Set c
+    _≈_     : Rel Carrier ℓ
+    _∙_     : Op₂ Carrier
+    ε       : Carrier
+
+---
+
+(source_file
+  (comment)
+  (record
+    (record_name
+      (qid))
+    (untyped_binding
+      (bid))
+    (untyped_binding
+      (bid))
+    (expr
+      (atom
+        (SetN
+          (atom
+            (expr
+              (atom
+                (qid))
+              (atom
+                (expr
+                  (atom
+                    (qid))
+                  (atom
+                    (qid))
+                  (atom
+                    (qid)))))))))
+    (record_declarations_block
+      (infix
+        (fixity
+          (integer))
+        (bid))
+      (infix
+        (fixity
+          (integer))
+        (bid))
+      (fields
+        (signature
+          (field_name)
+          (expr
+            (atom
+              (SetN
+                (atom
+                  (qid))))))
+        (signature
+          (field_name)
+          (expr
+            (atom
+              (qid))
+            (atom
+              (qid))
+            (atom
+              (qid))))
+        (signature
+          (field_name)
+          (expr
+            (atom
+              (qid))
+            (atom
+              (qid))))
+        (signature
+          (field_name)
+          (expr
+            (atom
+              (qid))))))))
+
+==================
+monoid
+==================
+
+record Monoid c ℓ : Set (suc (c ⊔ ℓ)) where
+  infixl 7 _∙_
+  infix  4 _≈_
+  field
+    Carrier  : Set c
+    _≈_      : Rel Carrier ℓ
+    _∙_      : Op₂ Carrier
+    ε        : Carrier
+    isMonoid : IsMonoid _≈_ _∙_ ε
+
+  open IsMonoid isMonoid public
+
+  semigroup : Semigroup _ _
+  semigroup = record { isSemigroup = isSemigroup }
+
+  rawMonoid : RawMonoid _ _
+  rawMonoid = record
+    { _≈_ = _≈_
+    ; _∙_ = _∙_
+    ; ε   = ε
+    }
+
+---
+
+(source_file
+  (record
+    (record_name
+      (qid))
+    (untyped_binding
+      (bid))
+    (untyped_binding
+      (bid))
+    (expr
+      (atom
+        (SetN
+          (atom
+            (expr
+              (atom
+                (qid))
+              (atom
+                (expr
+                  (atom
+                    (qid))
+                  (atom
+                    (qid))
+                  (atom
+                    (qid)))))))))
+    (record_declarations_block
+      (infix
+        (fixity
+          (integer))
+        (bid))
+      (infix
+        (fixity
+          (integer))
+        (bid))
+      (fields
+        (signature
+          (field_name)
+          (expr
+            (atom
+              (SetN
+                (atom
+                  (qid))))))
+        (signature
+          (field_name)
+          (expr
+            (atom
+              (qid))
+            (atom
+              (qid))
+            (atom
+              (qid))))
+        (signature
+          (field_name)
+          (expr
+            (atom
+              (qid))
+            (atom
+              (qid))))
+        (signature
+          (field_name)
+          (expr
+            (atom
+              (qid))))
+        (signature
+          (field_name)
+          (expr
+            (atom
+              (qid))
+            (atom
+              (qid))
+            (atom
+              (qid))
+            (atom
+              (qid)))))
+      (open
+        (module_name
+          (qid))
+        (atom
+          (qid))
+        (import_directive))
+      (function
+        (lhs
+          (function_name
+            (atom
+              (qid))))
+        (rhs
+          (expr
+            (atom
+              (qid))
+            (atom)
+            (atom))))
+      (function
+        (lhs
+          (atom
+            (qid)))
+        (rhs
+          (expr
+            (atom
+              (record_assignments
+                (field_assignment
+                  (field_name)
+                  (expr
+                    (atom
+                      (qid)))))))))
+      (function
+        (lhs
+          (function_name
+            (atom
+              (qid))))
+        (rhs
+          (expr
+            (atom
+              (qid))
+            (atom)
+            (atom))))
+      (function
+        (lhs
+          (atom
+            (qid)))
+        (rhs
+          (expr
+            (atom
+              (record_assignments
+                (field_assignment
+                  (field_name)
+                  (expr
+                    (atom
+                      (qid))))
+                (field_assignment
+                  (field_name)
+                  (expr
+                    (atom
+                      (qid))))
+                (field_assignment
+                  (field_name)
+                  (expr
+                    (atom
+                      (qid))))))))))))

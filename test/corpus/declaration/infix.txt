@@ -1,4 +1,18 @@
 ==================
+Fractional fixity precedence
+==================
+
+infix -3.14 _+_
+
+---
+
+(source_file
+  (infix
+    (fixity
+      (integer))
+    (bid)))
+
+==================
 Infix
 ==================
 
@@ -9,6 +23,16 @@ infixr 5 _-_ _-_
 ---
 
 (source_file
-    (infix (integer) (bid))
-    (infix (integer) (bid))
-    (infix (integer) (bid) (bid)))
+  (infix
+    (fixity
+      (integer))
+    (bid))
+  (infix
+    (fixity
+      (integer))
+    (bid))
+  (infix
+    (fixity
+      (integer))
+    (bid)
+    (bid)))

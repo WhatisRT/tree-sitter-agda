@@ -1,0 +1,118 @@
+==================
+Empty hole
+==================
+
+f = {!!}
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs (expr (atom (hole))))))
+
+==================
+Hole with identifier content (no spaces)
+==================
+
+f = {!q!}
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs (expr (atom (hole))))))
+
+==================
+Hole with spaced content
+==================
+
+f = {! q !}
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs (expr (atom (hole))))))
+
+==================
+Hole with multi-word content
+==================
+
+f = {!f x!}
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs (expr (atom (hole))))))
+
+==================
+Hole with bang in content
+==================
+
+f = {!f!x!}
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs (expr (atom (hole))))))
+
+==================
+Hole as function argument
+==================
+
+f = g {!q!} x
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (atom (qid))
+        (atom (hole))
+        (atom (qid))))))
+
+==================
+Hole in type signature
+==================
+
+f : {!A!} → B
+f = x
+
+---
+
+(source_file
+  (function
+    (lhs (function_name (atom (qid))))
+    (rhs
+      (expr
+        (atom (hole))
+        (expr (atom (qid))))))
+  (function
+    (lhs (atom (qid)))
+    (rhs (expr (atom (qid))))))
+
+==================
+Multiple holes
+==================
+
+f = {!a!} + {!b!}
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (atom (hole))
+        (atom (qid))
+        (atom (hole))))))

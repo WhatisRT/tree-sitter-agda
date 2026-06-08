@@ -1,0 +1,78 @@
+==================
+Renaming with left fixity
+==================
+
+open M renaming (x to infixl 5 _⊕_)
+
+---
+
+(source_file
+  (open
+    (module_name
+      (qid))
+    (import_directive
+      (renaming
+        (id)
+        (fixity
+          (integer))
+        (id)))))
+
+==================
+Renaming with right fixity
+==================
+
+open M renaming (_+_ to infixr 6 _⊕_)
+
+---
+
+(source_file
+  (open
+    (module_name
+      (qid))
+    (import_directive
+      (renaming
+        (id)
+        (fixity
+          (integer))
+        (id)))))
+
+==================
+Renaming with non-associative fixity
+==================
+
+open M renaming (_≤_ to infix 4 _⊑_)
+
+---
+
+(source_file
+  (open
+    (module_name
+      (qid))
+    (import_directive
+      (renaming
+        (id)
+        (fixity
+          (integer))
+        (id)))))
+
+==================
+Module renaming with fixity for operator re-export
+==================
+
+open M renaming (module N to M'; _*_ to infixl 7 _×_)
+
+---
+
+(source_file
+  (open
+    (module_name
+      (qid))
+    (import_directive
+      (renaming
+        (id)
+        (id))
+      (renaming
+        (id)
+        (fixity
+          (integer))
+        (id)))))

@@ -2,56 +2,29 @@
 Simple
 ==================
 
-f = λ (a : Set) b () -> a
+f = λ (a : Set) b -> a
 
 ---
 
 (source_file
-    (function
-        (lhs
-            (atom (qid)))
-        (rhs
-            (expr (lambda
-                (typed_binding (atom (qid)) (expr (atom (SetN))))
-                (untyped_binding (bid))
-                (expr (atom (qid))))))))
-
-==================
-Simple (empty)
-==================
-
-f = λ () -> a
-f = λ {} -> a
-f = λ {{}} -> a
-f = λ ⦃ ⦄ -> a
-
----
-
-(source_file
-    (function
-        (lhs
-            (atom (qid)))
-        (rhs
-            (expr (lambda
-                (expr (atom (qid)))))))
-    (function
-        (lhs
-            (atom (qid)))
-        (rhs
-            (expr (lambda
-                (expr (atom (qid)))))))
-    (function
-        (lhs
-            (atom (qid)))
-        (rhs
-            (expr (lambda
-                (expr (atom (qid)))))))
-    (function
-        (lhs
-            (atom (qid)))
-        (rhs
-            (expr (lambda
-                (expr (atom (qid))))))))
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (lambda
+          (typed_binding
+            (atom
+              (qid))
+            (expr
+              (atom
+                (SetN))))
+          (untyped_binding
+            (bid))
+          (expr
+            (atom
+              (qid))))))))
 
 ==================
 Clauses in braces
@@ -63,36 +36,61 @@ f = \ { a -> b
 ---
 
 (source_file
-    (function
-        (lhs
-            (atom (qid)))
-        (rhs
-            (expr (lambda
-                (lambda_clause (atom (qid)) (expr (atom (qid))))
-                (lambda_clause (atom (qid)) (expr (atom (qid))))
-                (lambda_clause_absurd (atom)))))))
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (lambda
+          (lambda_clause
+            (atom
+              (qid))
+            (expr
+              (atom
+                (qid))))
+          (lambda_clause
+            (atom
+              (qid))
+            (expr
+              (atom
+                (qid))))
+          (lambda_clause_absurd
+            (atom)))))))
 
 ==================
-Clauses in where
+Clauses in braces (extended lambda)
 ==================
-f = \ where
-      b -> c
-    ; ()
-    ; b -> c
-    ; b -> c
+f = \ { a -> b ; b -> c ; c -> a }
 
 ---
 
 (source_file
-    (function
-        (lhs
-            (atom (qid)))
-        (rhs
-            (expr (lambda
-                (lambda_clause (atom (qid)) (expr (atom (qid))))
-                (lambda_clause_absurd (atom))
-                (lambda_clause (atom (qid)) (expr (atom (qid))))
-                (lambda_clause (atom (qid)) (expr (atom (qid)))))))))
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (lambda
+          (lambda_clause
+            (atom
+              (qid))
+            (expr
+              (atom
+                (qid))))
+          (lambda_clause
+            (atom
+              (qid))
+            (expr
+              (atom
+                (qid))))
+          (lambda_clause
+            (atom
+              (qid))
+            (expr
+              (atom
+                (qid)))))))))
 
 ==================
 Absurd Lambda Bindings
@@ -102,10 +100,991 @@ f = \ (A : Set) b ()
 ---
 
 (source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (lambda
+          (typed_binding
+            (atom
+              (qid))
+            (expr
+              (atom
+                (SetN))))
+          (untyped_binding
+            (bid)))))))
+
+==================
+Lambda where clauses (inline)
+==================
+
+f = g >>= λ where (h x) → k x ; _ → l
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (atom
+          (qid))
+        (atom
+          (qid))
+        (lambda
+          (lambda_clause
+            (atom
+              (expr
+                (atom
+                  (qid))
+                (atom
+                  (qid))))
+            (expr
+              (atom
+                (qid))
+              (atom
+                (qid))))
+          (lambda_clause
+            (atom)
+            (expr
+              (atom
+                (qid)))))))))
+
+==================
+Lambda with single implicit binding
+==================
+
+f = λ {q} → x
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (lambda
+          (untyped_binding
+            (atom
+              (qid)))
+          (expr
+            (atom
+              (qid))))))))
+
+==================
+Lambda with multiple implicit bindings
+==================
+
+f = λ {q} {s} step → x
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (lambda
+          (untyped_binding
+            (atom
+              (qid)))
+          (untyped_binding
+            (atom
+              (qid)))
+          (untyped_binding
+            (bid))
+          (expr
+            (atom
+              (qid))))))))
+
+==================
+Lambda where with do body in first arm
+==================
+
+foo = f >>= λ where
+  yes → do
+    x
+  no → y
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (atom
+          (qid))
+        (atom
+          (qid))
+        (lambda
+          (lambda_clause
+            (atom
+              (qid))
+            (expr
+              (do
+                (stmt
+                  (atom
+                    (qid))))))
+          (lambda_clause
+            (atom
+              (qid))
+            (expr
+              (atom
+                (qid)))))))))
+
+==================
+Lambda where with do body in all arms
+==================
+
+foo = f >>= λ where
+  yes → do
+    x
+  no → do
+    y
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (atom
+          (qid))
+        (atom
+          (qid))
+        (lambda
+          (lambda_clause
+            (atom
+              (qid))
+            (expr
+              (do
+                (stmt
+                  (atom
+                    (qid))))))
+          (lambda_clause
+            (atom
+              (qid))
+            (expr
+              (do
+                (stmt
+                  (atom
+                    (qid)))))))))))
+
+==================
+Lambda as-pattern binding
+==================
+
+f = λ a b@(c , d) → a
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (lambda
+          (untyped_binding
+            (bid))
+          (untyped_binding
+            (as_pattern
+              (id)
+              (atom
+                (expr
+                  (atom
+                    (qid))
+                  (atom
+                    (qid))
+                  (atom
+                    (qid))))))
+          (expr
+            (atom
+              (qid))))))))
+
+==================
+Lambda on next indented line after =
+==================
+
+f =
+  λ b → b
+
+g =
+  \ b -> b
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (lambda
+          (untyped_binding
+            (bid))
+          (expr
+            (atom
+              (qid)))))))
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (lambda
+          (untyped_binding
+            (bid))
+          (expr
+            (atom
+              (qid))))))))
+
+==================
+Lambda where absurd-last clause (two patterns)
+==================
+
+f = λ where _ ()
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (lambda
+          (lambda_clause_absurd
+            (atom)
+            (atom)))))))
+
+==================
+Lambda where inline paren-pattern clause
+==================
+
+f = map (λ where (a , b) → a) xs
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (atom
+          (qid))
+        (atom
+          (expr
+            (lambda
+              (lambda_clause
+                (atom
+                  (expr
+                    (atom
+                      (qid))
+                    (atom
+                      (qid))
+                    (atom
+                      (qid))))
+                (expr
+                  (atom
+                    (qid)))))))
+        (atom
+          (qid))))))
+
+==================
+Lambda where let-in record body followed by next declaration
+==================
+
+private
+  f = λ where
+    _ → let x = y in record { a = b }
+  g = x
+
+---
+
+(source_file
+  (private
     (function
+      (lhs
+        (atom
+          (qid)))
+      (rhs
+        (expr
+          (lambda
+            (lambda_clause
+              (atom)
+              (expr
+                (let
+                  (function
+                    (lhs
+                      (atom
+                        (qid)))
+                    (rhs
+                      (expr
+                        (atom
+                          (qid)))))
+                  (expr
+                    (atom
+                      (record_assignments
+                        (field_assignment
+                          (field_name)
+                          (expr
+                            (atom
+                              (qid))))))))))))))
+    (function
+      (lhs
+        (atom
+          (qid)))
+      (rhs
+        (expr
+          (atom
+            (qid)))))))
+
+==================
+Inline lambda where in instance block followed by outer declaration
+==================
+
+instance
+  Foo = λ where hash tt → 0
+bar : T
+bar = y
+
+---
+
+(source_file
+  (instance
+    (function
+      (lhs
+        (atom
+          (qid)))
+      (rhs
+        (expr
+          (lambda
+            (lambda_clause
+              (atom
+                (qid))
+              (atom
+                (qid))
+              (expr
+                (atom
+                  (qid)))))))))
+  (function
+    (lhs
+      (function_name
+        (atom
+          (qid))))
+    (rhs
+      (expr
+        (atom
+          (qid)))))
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (atom
+          (qid))))))
+
+==================
+Inline lambda where with copattern in instance block followed by outer declaration
+==================
+
+instance
+  Foo = λ where .hash tt → 0
+bar : T
+bar = y
+
+---
+
+(source_file
+  (instance
+    (function
+      (lhs
+        (atom
+          (qid)))
+      (rhs
+        (expr
+          (lambda
+            (lambda_clause
+              (atom
+                (atom
+                  (qid)))
+              (atom
+                (qid))
+              (expr
+                (atom
+                  (qid)))))))))
+  (function
+    (lhs
+      (function_name
+        (atom
+          (qid))))
+    (rhs
+      (expr
+        (atom
+          (qid)))))
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (atom
+          (qid))))))
+
+==================
+lambda where with implicit patterns inside let-in
+==================
+
+module T where
+f = let open A in
+  λ where
+    {x} y → x
+    {z} w → z
+
+---
+
+(source_file
+  (module
+    (module_name
+      (qid)))
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (let
+          (open
+            (module_name
+              (qid)))
+          (expr
+            (lambda
+              (lambda_clause
+                (atom
+                  (expr
+                    (atom
+                      (qid))))
+                (atom
+                  (qid))
+                (expr
+                  (atom
+                    (qid))))
+              (lambda_clause
+                (atom
+                  (expr
+                    (atom
+                      (qid))))
+                (atom
+                  (qid))
+                (expr
+                  (atom
+                    (qid)))))))))))
+
+==========================================
+lambda-where with nested lambda-where does not swallow sibling declaration
+==========================================
+
+module M where
+
+module N where
+  f = λ where
+    nothing → x
+    (just y) → case g of λ where
+      (yes p) → a
+      (no _)  → b
+
+  h : A
+
+---
+
+(source_file
+  (module
+    (module_name
+      (qid)))
+  (module
+    (module_name
+      (qid))
+    (function
+      (lhs
+        (atom
+          (qid)))
+      (rhs
+        (expr
+          (lambda
+            (lambda_clause
+              (atom
+                (qid))
+              (expr
+                (atom
+                  (qid))))
+            (lambda_clause
+              (atom
+                (expr
+                  (atom
+                    (qid))
+                  (atom
+                    (qid))))
+              (expr
+                (atom
+                  (qid))
+                (atom
+                  (qid))
+                (atom
+                  (qid))
+                (lambda
+                  (lambda_clause
+                    (atom
+                      (expr
+                        (atom
+                          (qid))
+                        (atom
+                          (qid))))
+                    (expr
+                      (atom
+                        (qid))))
+                  (lambda_clause
+                    (atom
+                      (expr
+                        (atom
+                          (qid))
+                        (atom)))
+                    (expr
+                      (atom
+                        (qid)))))))))))
+    (function
+      (lhs
+        (function_name
+          (atom
+            (qid))))
+      (rhs
+        (expr
+          (atom
+            (qid)))))))
+
+==========================================
+lambda-where with do-block clauses does not swallow sibling declaration
+==========================================
+
+module M where
+
+module N where
+  f = case g of λ where
+    (yes p) → do
+      x
+      a
+    (no _) → do
+      y
+      b
+
+  h : A
+
+---
+
+(source_file
+  (module
+    (module_name
+      (qid)))
+  (module
+    (module_name
+      (qid))
+    (function
+      (lhs
+        (atom
+          (qid)))
+      (rhs
+        (expr
+          (atom
+            (qid))
+          (atom
+            (qid))
+          (atom
+            (qid))
+          (lambda
+            (lambda_clause
+              (atom
+                (expr
+                  (atom
+                    (qid))
+                  (atom
+                    (qid))))
+              (expr
+                (do
+                  (stmt
+                    (atom
+                      (qid)))
+                  (stmt
+                    (atom
+                      (qid))))))
+            (lambda_clause
+              (atom
+                (expr
+                  (atom
+                    (qid))
+                  (atom)))
+              (expr
+                (do
+                  (stmt
+                    (atom
+                      (qid)))
+                  (stmt
+                    (atom
+                      (qid))))))))))
+    (function
+      (lhs
+        (function_name
+          (atom
+            (qid))))
+      (rhs
+        (expr
+          (atom
+            (qid)))))))
+
+==================
+inline λ where with multi-arg pattern followed by record field
+==================
+
+f = record
+  { _≈_ = λ where (lift x) (lift y) → x ≈ y
+  ; isEq = g
+  }
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (atom
+          (record_assignments
+            (field_assignment
+              (field_name)
+              (expr
+                (lambda
+                  (lambda_clause
+                    (atom
+                      (expr
+                        (atom
+                          (qid))
+                        (atom
+                          (qid))))
+                    (atom
+                      (expr
+                        (atom
+                          (qid))
+                        (atom
+                          (qid))))
+                    (expr
+                      (atom
+                        (qid))
+                      (atom
+                        (qid))
+                      (atom
+                        (qid)))))))
+            (field_assignment
+              (field_name)
+              (expr
+                (atom
+                  (qid))))))))))
+
+==================
+inline λ where with named implicit pattern followed by record field
+==================
+
+h = record
+  { hom = λ where {Z = Z} → record { z = Z }
+  ; resp = r
+  }
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (atom
+          (record_assignments
+            (field_assignment
+              (field_name)
+              (expr
+                (lambda
+                  (lambda_clause
+                    (atom
+                      (expr
+                        (atom
+                          (qid))
+                        (expr
+                          (atom
+                            (qid)))))
+                    (expr
+                      (atom
+                        (record_assignments
+                          (field_assignment
+                            (field_name)
+                            (expr
+                              (atom
+                                (qid)))))))))))
+            (field_assignment
+              (field_name)
+              (expr
+                (atom
+                  (qid))))))))))
+
+==================
+case of λ where followed by function where clause
+==================
+
+f i =
+  case g i of λ where x → x
+  where g = id
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid))
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (atom
+          (qid))
+        (atom
+          (qid))
+        (atom
+          (qid))
+        (atom
+          (qid))
+        (lambda
+          (lambda_clause
+            (atom
+              (qid))
+            (expr
+              (atom
+                (qid)))))))
+    (where
+      (function
         (lhs
-            (atom (qid)))
+          (atom
+            (qid)))
         (rhs
-            (expr (lambda
-                (typed_binding (atom (qid)) (expr (atom (SetN))))
-                (untyped_binding (bid)))))))
+          (expr
+            (atom
+              (qid))))))))
+
+==================
+where clause after lambda where with let-in multi-line body
+==================
+
+module T where
+goᶜ = λ where
+  (clause p) → let n = f in
+    g h
+ where
+  instTel = x
+
+---
+
+(source_file
+  (module (module_name (qid)))
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (lambda
+          (lambda_clause
+            (atom (expr (atom (qid)) (atom (qid))))
+            (expr
+              (let
+                (function
+                  (lhs (atom (qid)))
+                  (rhs (expr (atom (qid)))))
+                (expr (atom (qid)) (atom (qid)))))))))
+    (where
+      (function
+        (lhs (atom (qid)))
+        (rhs (expr (atom (qid))))))))
+
+==================
+Brace lambda with do blocks in branches separated by semicolons
+==================
+
+f r = case r of λ
+  { a → do
+    x
+  ; b → do
+    c
+  ; d → e
+  }
+g = y
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)) (atom (qid)))
+    (rhs
+      (expr
+        (atom (qid))
+        (atom (qid))
+        (atom (qid))
+        (lambda
+          (lambda_clause
+            (atom (qid))
+            (expr
+              (do
+                (stmt (atom (qid))))))
+          (lambda_clause
+            (atom (qid))
+            (expr
+              (do
+                (stmt (atom (qid))))))
+          (lambda_clause
+            (atom (qid))
+            (expr (atom (qid))))))))
+  (function
+    (lhs (atom (qid)))
+    (rhs (expr (atom (qid))))))
+
+==================
+Lambda-where with where-clause indented deeper than clauses
+==================
+
+foo = λ where
+  .a → x
+  .b → λ l → l , z
+    where open Theory
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (lambda
+          (lambda_clause
+            (atom (atom (qid)))
+            (expr (atom (qid))))
+          (lambda_clause
+            (atom (atom (qid)))
+            (expr
+              (lambda
+                (untyped_binding (bid))
+                (expr (atom (qid)) (atom (qid)) (atom (qid)))))))))
+    (where
+      (open (module_name (qid))))))
+
+==================
+Brace lambda with do block in last branch closed by brace
+==================
+
+f = case x of λ
+  { nothing → a
+  ; just y → do
+      b
+      c }
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (atom (qid))
+        (atom (qid))
+        (atom (qid))
+        (lambda
+          (lambda_clause
+            (atom (qid))
+            (expr (atom (qid))))
+          (lambda_clause
+            (atom (qid))
+            (atom (qid))
+            (expr
+              (do
+                (stmt (atom (qid)))
+                (stmt (atom (qid)))))))))))
+
+==================
+Record with lambda-where field followed by function where-clause
+==================
+
+foo = record
+  { complete = λ where
+      p → q }
+  where pf = z
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (atom
+          (record_assignments
+            (field_assignment
+              (field_name)
+              (expr
+                (lambda
+                  (lambda_clause (atom (qid)) (expr (atom (qid)))))))))))
+    (where
+      (function
+        (lhs (atom (qid)))
+        (rhs (expr (atom (qid))))))))
+
+==================
+As-pattern in lambda binder
+==================
+
+f = λ (x@p) → x
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (lambda
+          (untyped_binding
+            (atom
+              (as_pattern
+                (id)
+                (atom
+                  (qid)))))
+          (expr
+            (atom
+              (qid))))))))

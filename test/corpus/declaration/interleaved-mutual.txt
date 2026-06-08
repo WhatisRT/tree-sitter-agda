@@ -1,0 +1,70 @@
+==================
+Interleaved mutual block
+==================
+
+interleaved mutual
+    data D : Set
+    f : D → D
+    data D where
+        c : D
+    f c = c
+
+---
+
+(source_file
+  (interleaved_mutual
+    (data_signature
+      (data_name)
+      (expr
+        (atom
+          (SetN))))
+    (function
+      (lhs
+        (function_name
+          (atom
+            (qid))))
+      (rhs
+        (expr
+          (atom
+            (qid))
+          (expr
+            (atom
+              (qid))))))
+    (data
+      (data_name)
+      (function
+        (lhs
+          (function_name
+            (atom
+              (qid))))
+        (rhs
+          (expr
+            (atom
+              (qid))))))
+    (function
+      (lhs
+        (atom
+          (qid))
+        (atom
+          (qid)))
+      (rhs
+        (expr
+          (atom
+            (qid)))))))
+
+==================
+Interleaved mutual empty-ish
+==================
+
+interleaved mutual
+    data D : Set
+
+---
+
+(source_file
+  (interleaved_mutual
+    (data_signature
+      (data_name)
+      (expr
+        (atom
+          (SetN))))))

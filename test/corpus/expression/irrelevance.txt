@@ -1,0 +1,146 @@
+==================
+Shape-irrelevant atom in function type
+==================
+
+postulate f : A → ..B → A
+
+---
+
+(source_file
+  (postulate
+    (function
+      (lhs
+        (function_name (atom (qid))))
+      (rhs
+        (expr
+          (atom (qid))
+          (expr
+            (atom (atom (qid)))
+            (expr (atom (qid)))))))))
+
+==================
+Shape-irrelevant brace arg in function type
+==================
+
+postulate f : A → ..{B} → A
+
+---
+
+(source_file
+  (postulate
+    (function
+      (lhs
+        (function_name (atom (qid))))
+      (rhs
+        (expr
+          (atom (qid))
+          (expr
+            (atom
+              (atom
+                (expr (atom (qid)))))
+            (expr (atom (qid)))))))))
+
+==================
+Shape-irrelevant parenthesized type in function type
+==================
+
+postulate f : A → ..(B) → A
+
+---
+
+(source_file
+  (postulate
+    (function
+      (lhs
+        (function_name (atom (qid))))
+      (rhs
+        (expr
+          (atom (qid))
+          (expr
+            (atom
+              (atom
+                (expr (atom (qid)))))
+            (expr (atom (qid)))))))))
+
+==================
+Shape-irrelevant atom inside parens in function type
+==================
+
+postulate f : A → (..B) → A
+
+---
+
+(source_file
+  (postulate
+    (function
+      (lhs
+        (function_name (atom (qid))))
+      (rhs
+        (expr
+          (atom (qid))
+          (expr
+            (atom
+              (expr
+                (atom (atom (qid)))))
+            (expr (atom (qid)))))))))
+
+==================
+Erased binder in forall
+==================
+
+f : ∀ @0 A → A → A
+
+---
+
+(source_file
+  (function
+    (lhs (function_name (atom (qid))))
+    (rhs
+      (expr
+        (forall
+          (untyped_binding
+            (attributes (attribute (qid)))
+            (bid))
+          (expr
+            (atom (qid))
+            (expr (atom (qid)))))))))
+
+==================
+Dotted attribute-paren in forall binding
+==================
+
+f : ∀ .(@relevant A) → A
+
+---
+
+(source_file
+  (function
+    (lhs (function_name (atom (qid))))
+    (rhs
+      (expr
+        (forall
+          (untyped_binding
+            (attributes (attribute (qid)))
+            (atom (qid)))
+          (expr (atom (qid))))))))
+
+==================
+Dotted attribute-paren in function type
+==================
+
+postulate f : {A : Set} → .(@relevant A) → A
+
+---
+
+(source_file
+  (postulate
+    (function
+      (lhs (function_name (atom (qid))))
+      (rhs
+        (expr
+          (typed_binding (atom (qid)) (expr (atom (SetN))))
+          (expr
+            (atom
+              (attributes (attribute (qid)))
+              (atom (qid)))
+            (expr (atom (qid)))))))))

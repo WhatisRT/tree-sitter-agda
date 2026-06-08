@@ -1,0 +1,46 @@
+==================
+`module` cannot be used as identifier
+==================
+
+f = module
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid))))
+  (ERROR))
+
+==================
+`with` cannot be used as identifier
+==================
+
+f = with
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid))))
+  (ERROR))
+
+==================
+`where` cannot be used as identifier
+==================
+
+f = where
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (ERROR)
+    (where)))
+

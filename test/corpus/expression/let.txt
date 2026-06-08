@@ -9,20 +9,26 @@ f x = let
 ---
 
 (source_file
-    (function
-        (lhs
-            (atom (qid))
-            (atom (qid)))
-        (rhs
-            (expr
-                (let
-                    (function
-                        (lhs
-                            (atom (qid)))
-                        (rhs
-                            (expr
-                                (atom (qid)))))
-                    (expr (atom (qid))))))))
+  (function
+    (lhs
+      (atom
+        (qid))
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (let
+          (function
+            (lhs
+              (atom
+                (qid)))
+            (rhs
+              (expr
+                (atom
+                  (qid)))))
+          (expr
+            (atom
+              (qid))))))))
 
 ==================
 Simple line (indent only)
@@ -34,20 +40,26 @@ f x = let
 ---
 
 (source_file
-    (function
-        (lhs
-            (atom (qid))
-            (atom (qid)))
-        (rhs
-            (expr
-                (let
-                    (function
-                        (lhs
-                            (atom (qid)))
-                        (rhs
-                            (expr
-                                (atom (qid)))))
-                    (expr (atom (qid))))))))
+  (function
+    (lhs
+      (atom
+        (qid))
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (let
+          (function
+            (lhs
+              (atom
+                (qid)))
+            (rhs
+              (expr
+                (atom
+                  (qid)))))
+          (expr
+            (atom
+              (qid))))))))
 
 ==================
 Simple line (dedent only)
@@ -59,20 +71,26 @@ f x = let y = x
 ---
 
 (source_file
-    (function
-        (lhs
-            (atom (qid))
-            (atom (qid)))
-        (rhs
-            (expr
-                (let
-                    (function
-                        (lhs
-                            (atom (qid)))
-                        (rhs
-                            (expr
-                                (atom (qid)))))
-                    (expr (atom (qid))))))))
+  (function
+    (lhs
+      (atom
+        (qid))
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (let
+          (function
+            (lhs
+              (atom
+                (qid)))
+            (rhs
+              (expr
+                (atom
+                  (qid)))))
+          (expr
+            (atom
+              (qid))))))))
 
 ==================
 Single line (on the same line)
@@ -83,20 +101,65 @@ f x = let y = x in y
 ---
 
 (source_file
-    (function
-        (lhs
-            (atom (qid))
-            (atom (qid)))
-        (rhs
-            (expr
-                (let
-                    (function
-                        (lhs
-                            (atom (qid)))
-                        (rhs
-                            (expr
-                                (atom (qid)))))
-                    (expr (atom (qid))))))))
+  (function
+    (lhs
+      (atom
+        (qid))
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (let
+          (function
+            (lhs
+              (atom
+                (qid)))
+            (rhs
+              (expr
+                (atom
+                  (qid)))))
+          (expr
+            (atom
+              (qid))))))))
+
+==================
+Let open in followed by declaration
+==================
+
+f = let open B in B
+
+record R : Set where
+    field y : Set
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (let
+          (open
+            (module_name
+              (qid)))
+          (expr
+            (atom
+              (qid)))))))
+  (record
+    (record_name
+      (qid))
+    (expr
+      (atom
+        (SetN)))
+    (record_declarations_block
+      (fields
+        (signature
+          (field_name)
+          (expr
+            (atom
+              (SetN))))))))
 
 ==================
 Single line (dangling tail)
@@ -108,21 +171,26 @@ f x = let y = x in
 ---
 
 (source_file
-    (function
-        (lhs
-            (atom (qid))
-            (atom (qid)))
-        (rhs
-            (expr
-                (let
-                    (function
-                        (lhs
-                            (atom (qid)))
-                        (rhs
-                            (expr
-                                (atom (qid)))))
-                    (expr (atom (qid))))))))
-
+  (function
+    (lhs
+      (atom
+        (qid))
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (let
+          (function
+            (lhs
+              (atom
+                (qid)))
+            (rhs
+              (expr
+                (atom
+                  (qid)))))
+          (expr
+            (atom
+              (qid))))))))
 
 ==================
 Multiline (indent and dedent)
@@ -136,23 +204,34 @@ f x = let
 ---
 
 (source_file
-    (function
-        (lhs
-            (atom (qid))
-            (atom (qid)))
-        (rhs
-            (expr (let
-                (function
-                    (lhs
-                        (atom (qid)))
-                    (rhs
-                        (expr (atom (qid)))))
-                (function
-                    (lhs
-                        (atom (qid)))
-                    (rhs
-                        (expr (atom (qid)))))
-                (expr (atom (qid))))))))
+  (function
+    (lhs
+      (atom
+        (qid))
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (let
+          (function
+            (lhs
+              (atom
+                (qid)))
+            (rhs
+              (expr
+                (atom
+                  (qid)))))
+          (function
+            (lhs
+              (atom
+                (qid)))
+            (rhs
+              (expr
+                (atom
+                  (qid)))))
+          (expr
+            (atom
+              (qid))))))))
 
 ==================
 Multiline (indent only)
@@ -165,23 +244,34 @@ f x = let
 ---
 
 (source_file
-    (function
-        (lhs
-            (atom (qid))
-            (atom (qid)))
-        (rhs
-            (expr (let
-                (function
-                    (lhs
-                        (atom (qid)))
-                    (rhs
-                        (expr (atom (qid)))))
-                (function
-                    (lhs
-                        (atom (qid)))
-                    (rhs
-                        (expr (atom (qid)))))
-                (expr (atom (qid))))))))
+  (function
+    (lhs
+      (atom
+        (qid))
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (let
+          (function
+            (lhs
+              (atom
+                (qid)))
+            (rhs
+              (expr
+                (atom
+                  (qid)))))
+          (function
+            (lhs
+              (atom
+                (qid)))
+            (rhs
+              (expr
+                (atom
+                  (qid)))))
+          (expr
+            (atom
+              (qid))))))))
 
 ==================
 Multiline (dedent only)
@@ -194,23 +284,34 @@ f x = let y = x
 ---
 
 (source_file
-    (function
-        (lhs
-            (atom (qid))
-            (atom (qid)))
-        (rhs
-            (expr (let
-                (function
-                    (lhs
-                        (atom (qid)))
-                    (rhs
-                        (expr (atom (qid)))))
-                (function
-                    (lhs
-                        (atom (qid)))
-                    (rhs
-                        (expr (atom (qid)))))
-                (expr (atom (qid))))))))
+  (function
+    (lhs
+      (atom
+        (qid))
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (let
+          (function
+            (lhs
+              (atom
+                (qid)))
+            (rhs
+              (expr
+                (atom
+                  (qid)))))
+          (function
+            (lhs
+              (atom
+                (qid)))
+            (rhs
+              (expr
+                (atom
+                  (qid)))))
+          (expr
+            (atom
+              (qid))))))))
 
 ==================
 Multiline (dangling tail)
@@ -223,24 +324,34 @@ f x = let y = x
 ---
 
 (source_file
-    (function
-        (lhs
-            (atom (qid))
-            (atom (qid)))
-        (rhs
-            (expr (let
-                (function
-                    (lhs
-                        (atom (qid)))
-                    (rhs
-                        (expr (atom (qid)))))
-                (function
-                    (lhs
-                        (atom (qid)))
-                    (rhs
-                        (expr (atom (qid)))))
-                (expr (atom (qid))))))))
-
+  (function
+    (lhs
+      (atom
+        (qid))
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (let
+          (function
+            (lhs
+              (atom
+                (qid)))
+            (rhs
+              (expr
+                (atom
+                  (qid)))))
+          (function
+            (lhs
+              (atom
+                (qid)))
+            (rhs
+              (expr
+                (atom
+                  (qid)))))
+          (expr
+            (atom
+              (qid))))))))
 
 ==================
 Telescope single line I
@@ -251,26 +362,36 @@ f x = let y = x in let y = x in y
 ---
 
 (source_file
-    (function
-        (lhs
-            (atom (qid))
-            (atom (qid)))
-        (rhs
-            (expr
-                (let
-                    (function
-                        (lhs
-                            (atom (qid)))
-                        (rhs
-                            (expr (atom (qid)))))
-                    (expr
-                        (let
-                            (function
-                                (lhs
-                                    (atom (qid)))
-                                (rhs
-                                    (expr (atom (qid)))))
-                            (expr (atom (qid))))))))))
+  (function
+    (lhs
+      (atom
+        (qid))
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (let
+          (function
+            (lhs
+              (atom
+                (qid)))
+            (rhs
+              (expr
+                (atom
+                  (qid)))))
+          (expr
+            (let
+              (function
+                (lhs
+                  (atom
+                    (qid)))
+                (rhs
+                  (expr
+                    (atom
+                      (qid)))))
+              (expr
+                (atom
+                  (qid))))))))))
 
 ==================
 Telescope single line II
@@ -282,63 +403,37 @@ f x = let y = x in
 ---
 
 (source_file
-    (function
-        (lhs
-            (atom (qid))
-            (atom (qid)))
-        (rhs
-            (expr
-                (let
-                    (function
-                        (lhs
-                            (atom (qid)))
-                        (rhs
-                            (expr (atom (qid)))))
-                    (expr
-                        (let
-                            (function
-                                (lhs
-                                    (atom (qid)))
-                                (rhs
-                                    (expr (atom (qid)))))
-                            (expr (atom (qid))))))))))
+  (function
+    (lhs
+      (atom
+        (qid))
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (let
+          (function
+            (lhs
+              (atom
+                (qid)))
+            (rhs
+              (expr
+                (atom
+                  (qid)))))
+          (expr
+            (let
+              (function
+                (lhs
+                  (atom
+                    (qid)))
+                (rhs
+                  (expr
+                    (atom
+                      (qid)))))
+              (expr
+                (atom
+                  (qid))))))))))
 
-==================
-Telescope multi line I
-==================
-
-f x = let y = x
-          y = x in
-     let y = x in y
-
----
-
-(source_file
-    (function
-        (lhs
-            (atom (qid))
-            (atom (qid)))
-        (rhs
-            (expr
-                (let
-                    (function
-                        (lhs
-                            (atom (qid)))
-                        (rhs
-                            (expr (atom (qid)))))
-                    (function
-                        (lhs
-                            (atom (qid)))
-                        (rhs
-                            (expr (atom (qid)))))
-                    (expr
-                        (let
-                            (function
-                                (lhs
-                                    (atom (qid)))
-                                (rhs
-                                    (expr (atom (qid)))))
-                            (expr (atom (qid))))))))))
 ==================
 Single line without body
 ==================
@@ -351,8 +446,10 @@ f x = do
 (source_file
   (function
     (lhs
-      (atom (qid))
-      (atom (qid)))
+      (atom
+        (qid))
+      (atom
+        (qid)))
     (rhs
       (expr
         (do
@@ -360,10 +457,12 @@ f x = do
             (let
               (function
                 (lhs
-                  (atom (qid)))
+                  (atom
+                    (qid)))
                 (rhs
-                    (expr
-                      (atom (qid))))))))))))
+                  (expr
+                    (atom
+                      (qid))))))))))))
 
 ==================
 Single line without body (indent)
@@ -378,8 +477,10 @@ f x = do
 (source_file
   (function
     (lhs
-      (atom (qid))
-      (atom (qid)))
+      (atom
+        (qid))
+      (atom
+        (qid)))
     (rhs
       (expr
         (do
@@ -387,10 +488,12 @@ f x = do
             (let
               (function
                 (lhs
-                  (atom (qid)))
+                  (atom
+                    (qid)))
                 (rhs
-                    (expr
-                      (atom (qid))))))))))))
+                  (expr
+                    (atom
+                      (qid))))))))))))
 
 ==================
 Multiline without body
@@ -404,25 +507,31 @@ f x = do let y = x
 (source_file
   (function
     (lhs
-      (atom (qid))
-      (atom (qid)))
+      (atom
+        (qid))
+      (atom
+        (qid)))
     (rhs
       (expr
         (do
           (stmt
             (let
               (function
-                  (lhs
-                      (atom (qid)))
-                  (rhs
-                      (expr
-                          (atom (qid)))))
+                (lhs
+                  (atom
+                    (qid)))
+                (rhs
+                  (expr
+                    (atom
+                      (qid)))))
               (function
                 (lhs
-                  (atom (qid)))
+                  (atom
+                    (qid)))
                 (rhs
-                    (expr
-                      (atom (qid))))))))))))
+                  (expr
+                    (atom
+                      (qid))))))))))))
 
 ==================
 Multiline without body (indent)
@@ -438,22 +547,1356 @@ f x = do
 (source_file
   (function
     (lhs
-      (atom (qid))
-      (atom (qid)))
+      (atom
+        (qid))
+      (atom
+        (qid)))
     (rhs
       (expr
         (do
           (stmt
             (let
               (function
-                  (lhs
-                      (atom (qid)))
-                  (rhs
-                      (expr
-                          (atom (qid)))))
+                (lhs
+                  (atom
+                    (qid)))
+                (rhs
+                  (expr
+                    (atom
+                      (qid)))))
               (function
                 (lhs
-                  (atom (qid)))
+                  (atom
+                    (qid)))
                 (rhs
+                  (expr
+                    (atom
+                      (qid))))))))))))
+
+==================
+Single line (semicolon-separated declarations)
+==================
+
+f = let g = a; h = b in g
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (let
+          (function
+            (lhs
+              (atom
+                (qid)))
+            (rhs
+              (expr
+                (atom
+                  (qid)))))
+          (function
+            (lhs
+              (atom
+                (qid)))
+            (rhs
+              (expr
+                (atom
+                  (qid)))))
+          (expr
+            (atom
+              (qid))))))))
+
+==================
+Let-in with multi-line continuation body at same column as let body
+==================
+
+let
+  x = y
+in
+  P
+  Q
+
+---
+
+(source_file
+  (function
+    (lhs
+      (let
+        (function
+          (lhs
+            (atom
+              (qid)))
+          (rhs
+            (expr
+              (atom
+                (qid)))))
+        (expr
+          (atom
+            (qid))
+          (atom
+            (qid)))))))
+
+==================
+Lambda in let binding RHS
+==================
+
+f = let x = g (λ {b} hb → b) in x
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (let
+          (function
+            (lhs
+              (atom
+                (qid)))
+            (rhs
+              (expr
+                (atom
+                  (qid))
+                (atom
+                  (expr
+                    (lambda
+                      (untyped_binding
+                        (atom
+                          (qid)))
+                      (untyped_binding
+                        (bid))
+                      (expr
+                        (atom
+                          (qid)))))))))
+          (expr
+            (atom
+              (qid))))))))
+
+==================
+Where clause after inline let-in expression
+==================
+
+f = let x = y in z
+  where
+    w = v
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (let
+          (function
+            (lhs
+              (atom
+                (qid)))
+            (rhs
+              (expr
+                (atom
+                  (qid)))))
+          (expr
+            (atom
+              (qid))))))
+    (where
+      (function
+        (lhs
+          (atom
+            (qid)))
+        (rhs
+          (expr
+            (atom
+              (qid))))))))
+
+==================
+Multiline let in type followed by arrow
+==================
+
+_ : (let b = x
+    ) → b
+_ = refl
+
+---
+
+(source_file
+  (function
+    (lhs
+      (function_name
+        (atom)))
+    (rhs
+      (expr
+        (typed_binding
+          (function
+            (lhs
+              (atom
+                (qid)))
+            (rhs
+              (expr
+                (atom
+                  (qid))))))
+        (expr
+          (atom
+            (qid))))))
+  (function
+    (lhs
+      (atom))
+    (rhs
+      (expr
+        (atom
+          (qid))))))
+
+==================
+Private variable declaration after inline let-in expression
+==================
+
+f = let x = y in g
+
+private variable ms : A
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (let
+          (function
+            (lhs
+              (atom
+                (qid)))
+            (rhs
+              (expr
+                (atom
+                  (qid)))))
+          (expr
+            (atom
+              (qid)))))))
+  (private
+    (generalize
+      (signature
+        (field_name)
+        (expr
+          (atom
+            (qid)))))))
+
+==================
+let open in lambda-where inside record literal field
+==================
+
+f = record
+  { g = let open P in λ where
+      A → B
+      C → D
+  }
+  where
+    open N
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (atom
+          (record_assignments
+            (field_assignment
+              (field_name)
+              (expr
+                (let
+                  (open
+                    (module_name
+                      (qid)))
+                  (expr
+                    (lambda
+                      (lambda_clause
+                        (atom
+                          (qid))
+                        (expr
+                          (atom
+                            (qid))))
+                      (lambda_clause
+                        (atom
+                          (qid))
+                        (expr
+                          (atom
+                            (qid)))))))))))))
+    (where
+      (open
+        (module_name
+          (qid))))))
+
+==================
+@rewrite telescope binding
+==================
+
+module _ (n : Nat) (@rewrite p : n) where
+  test = refl
+
+---
+
+(source_file
+  (module
+    (module_name)
+    (typed_binding
+      (atom
+        (qid))
+      (expr
+        (atom
+          (qid))))
+    (typed_binding
+      (attributes
+        (attribute))
+      (atom
+        (qid))
+      (expr
+        (atom
+          (qid))))
+    (function
+      (lhs
+        (atom
+          (qid)))
+      (rhs
+        (expr
+          (atom
+            (qid)))))))
+
+==================
+let instance declaration
+==================
+
+bar = let instance z = i in foo
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (let
+          (instance
+            (function
+              (lhs
+                (atom
+                  (qid)))
+              (rhs
+                (expr
+                  (atom
+                    (qid))))))
+          (expr
+            (atom
+              (qid))))))))
+
+==================
+let postulate with @rewrite attribute
+==================
+
+test x = let postulate @rewrite p : A in 42
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid))
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (let
+          (postulate
+            (function
+              (attributes
+                (attribute))
+              (lhs
+                (function_name
+                  (atom
+                    (qid))))
+              (rhs
+                (expr
+                  (atom
+                    (qid))))))
+          (expr
+            (atom
+              (qid))))))))
+
+==================
+let module macro inside lambda where clause
+==================
+
+module T where
+f = λ where
+  .to x → let module x = M x in x.v
+  .from x → x
+
+---
+
+(source_file
+  (module
+    (module_name
+      (qid)))
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (lambda
+          (lambda_clause
+            (atom
+              (atom
+                (qid)))
+            (atom
+              (qid))
+            (expr
+              (let
+                (module_macro
+                  (module_name
+                    (qid))
+                  (module_application
+                    (module_name
+                      (qid))
+                    (atom
+                      (qid))))
+                (expr
+                  (atom
+                    (qid))))))
+          (lambda_clause
+            (atom
+              (atom
+                (qid)))
+            (atom
+              (qid))
+            (expr
+              (atom
+                (qid)))))))))
+
+==========================================
+let-in inside paren does not steal next function where
+==========================================
+
+module M where
+postulate A : Set
+postulate f : A → A
+g : A → A
+g x = f (let y = f x in y)
+h : A → A
+h x = x
+  where
+  _ = f
+
+---
+
+(source_file
+  (module
+    (module_name
+      (qid)))
+  (postulate
+    (function
+      (lhs
+        (function_name
+          (atom
+            (qid))))
+      (rhs
+        (expr
+          (atom
+            (SetN))))))
+  (postulate
+    (function
+      (lhs
+        (function_name
+          (atom
+            (qid))))
+      (rhs
+        (expr
+          (atom
+            (qid))
+          (expr
+            (atom
+              (qid)))))))
+  (function
+    (lhs
+      (function_name
+        (atom
+          (qid))))
+    (rhs
+      (expr
+        (atom
+          (qid))
+        (expr
+          (atom
+            (qid))))))
+  (function
+    (lhs
+      (atom
+        (qid))
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (atom
+          (qid))
+        (atom
+          (expr
+            (let
+              (function
+                (lhs
+                  (atom
+                    (qid)))
+                (rhs
+                  (expr
+                    (atom
+                      (qid))
+                    (atom
+                      (qid)))))
+              (expr
+                (atom
+                  (qid)))))))))
+  (function
+    (lhs
+      (function_name
+        (atom
+          (qid))))
+    (rhs
+      (expr
+        (atom
+          (qid))
+        (expr
+          (atom
+            (qid))))))
+  (function
+    (lhs
+      (atom
+        (qid))
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (atom
+          (qid))))
+    (where
+      (function
+        (lhs
+          (atom))
+        (rhs
+          (expr
+            (atom
+              (qid))))))))
+
+==================
+let module body continuation in expression context
+==================
+
+f = record
+  { g = λ {X} →
+      let module SR = S X in
+      SR.b
+         SR.c
+  }
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (atom
+          (record_assignments
+            (field_assignment
+              (field_name)
+              (expr
+                (lambda
+                  (untyped_binding
+                    (atom
+                      (qid)))
+                  (expr
+                    (let
+                      (module_macro
+                        (module_name
+                          (qid))
+                        (module_application
+                          (module_name
+                            (qid))
+                          (atom
+                            (qid))))
+                      (expr
+                        (atom
+                          (qid))
+                        (atom
+                          (qid))))))))))))))
+
+==================
+let module body at same column as let in lambda
+==================
+
+f = λ {X} →
+  let module SR = S X in
+  SR.b
+     SR.c
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (lambda
+          (untyped_binding
+            (atom
+              (qid)))
+          (expr
+            (let
+              (module_macro
+                (module_name
+                  (qid))
+                (module_application
+                  (module_name
+                    (qid))
+                  (atom
+                    (qid))))
+              (expr
+                (atom
+                  (qid))
+                (atom
+                  (qid))))))))))
+
+==================
+let module in record field followed by semicolon field then where clause
+==================
+
+f = record
+  { field2 = λ b →
+    let module Y = N in record { to = λ c → c }
+  ; field3 = λ e → e
+  }
+  where open P
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (atom
+          (record_assignments
+            (field_assignment
+              (field_name)
+              (expr
+                (lambda
+                  (untyped_binding
+                    (bid))
+                  (expr
+                    (let
+                      (module_macro
+                        (module_name
+                          (qid))
+                        (module_application
+                          (module_name
+                            (qid))))
+                      (expr
+                        (atom
+                          (record_assignments
+                            (field_assignment
+                              (field_name)
+                              (expr
+                                (lambda
+                                  (untyped_binding
+                                    (bid))
+                                  (expr
+                                    (atom
+                                      (qid))))))))))))))
+            (field_assignment
+              (field_name)
+              (expr
+                (lambda
+                  (untyped_binding
+                    (bid))
+                  (expr
+                    (atom
+                      (qid))))))))))
+    (where
+      (open
+        (module_name
+          (qid))))))
+
+==================
+nested let open in lambda-brace multiline body
+==================
+
+f = λ { x → let a = m in let b = n in something
+         ∘ y }
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (lambda
+          (lambda_clause
+            (atom
+              (qid))
+            (expr
+              (let
+                (function
+                  (lhs
+                    (atom
+                      (qid)))
+                  (rhs
                     (expr
-                      (atom (qid))))))))))))
+                      (atom
+                        (qid)))))
+                (expr
+                  (let
+                    (function
+                      (lhs
+                        (atom
+                          (qid)))
+                      (rhs
+                        (expr
+                          (atom
+                            (qid)))))
+                    (expr
+                      (atom
+                        (qid))
+                      (atom
+                        (qid))
+                      (atom
+                        (qid)))))))))))))
+
+==================
+let open + open using in lambda
+==================
+
+f = λ {A} {B} → let open M
+                    open N using (x; y)
+                in z
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (lambda
+          (untyped_binding
+            (atom
+              (qid)))
+          (untyped_binding
+            (atom
+              (qid)))
+          (expr
+            (let
+              (open
+                (module_name
+                  (qid)))
+              (open
+                (module_name
+                  (qid))
+                (import_directive
+                  (id)
+                  (id)))
+              (expr
+                (atom
+                  (qid))))))))))
+
+==================
+let module with using clause
+==================
+
+f = let module M = Cat A using (id)
+        module N = Cat B using (id)
+        open M.HomReasoning
+    in begin
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (let
+          (module_macro
+            (module_name
+              (qid))
+            (module_application
+              (module_name
+                (qid))
+              (atom
+                (qid)))
+            (import_directive
+              (id)))
+          (module_macro
+            (module_name
+              (qid))
+            (module_application
+              (module_name
+                (qid))
+              (atom
+                (qid)))
+            (import_directive
+              (id)))
+          (open
+            (module_name
+              (qid)))
+          (expr
+            (atom
+              (qid))))))))
+
+==================
+let open + open using (multi-item) in lambda
+==================
+
+f = λ {X Y} i →
+  let open C.HomReasoning
+      open MR C using (pullʳ; cancelˡ)
+  in g i
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (lambda
+          (untyped_binding
+            (atom
+              (qid))
+            (atom
+              (qid)))
+          (untyped_binding
+            (bid))
+          (expr
+            (let
+              (open
+                (module_name
+                  (qid)))
+              (open
+                (module_name
+                  (qid))
+                (atom
+                  (qid))
+                (import_directive
+                  (id)
+                  (id)))
+              (expr
+                (atom
+                  (qid))
+                (atom
+                  (qid))))))))))
+
+==================
+let module + using × 2 + open in lambda
+==================
+
+f = λ {B D E} →
+  let module B = Category B using (id)
+      module D = Category D using (id)
+      open UnderlyingReasoning E
+  in begin
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (lambda
+          (untyped_binding
+            (atom
+              (qid))
+            (atom
+              (qid))
+            (atom
+              (qid)))
+          (expr
+            (let
+              (module_macro
+                (module_name
+                  (qid))
+                (module_application
+                  (module_name
+                    (qid))
+                  (atom
+                    (qid)))
+                (import_directive
+                  (id)))
+              (module_macro
+                (module_name
+                  (qid))
+                (module_application
+                  (module_name
+                    (qid))
+                  (atom
+                    (qid)))
+                (import_directive
+                  (id)))
+              (open
+                (module_name
+                  (qid))
+                (atom
+                  (qid)))
+              (expr
+                (atom
+                  (qid))))))))))
+
+==================
+let open + open M using after inline let in sibling record field
+==================
+
+f = record
+  { unit = record
+    { commute = λ i → let open A in h i
+    }
+  ; counit = record
+    { commute = λ {X Y} i →
+      let open A
+          open B using (pullʳ)
+      in g
+    }
+  }
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (atom
+          (record_assignments
+            (field_assignment
+              (field_name)
+              (expr
+                (atom
+                  (record_assignments
+                    (field_assignment
+                      (field_name)
+                      (expr
+                        (lambda
+                          (untyped_binding
+                            (bid))
+                          (expr
+                            (let
+                              (open
+                                (module_name
+                                  (qid)))
+                              (expr
+                                (atom
+                                  (qid))
+                                (atom
+                                  (qid))))))))))))
+            (field_assignment
+              (field_name)
+              (expr
+                (atom
+                  (record_assignments
+                    (field_assignment
+                      (field_name)
+                      (expr
+                        (lambda
+                          (untyped_binding
+                            (atom
+                              (qid))
+                            (atom
+                              (qid)))
+                          (untyped_binding
+                            (bid))
+                          (expr
+                            (let
+                              (open
+                                (module_name
+                                  (qid)))
+                              (open
+                                (module_name
+                                  (qid))
+                                (import_directive
+                                  (id)))
+                              (expr
+                                (atom
+                                  (qid))))))))))))))))))
+
+==================
+nested let open multiline body at outer-let column
+==================
+
+f =
+  let module SR = S
+  in record
+  { g = λ x →
+      let open SR
+      in f
+      x
+  }
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (let
+          (module_macro
+            (module_name
+              (qid))
+            (module_application
+              (module_name
+                (qid))))
+          (expr
+            (atom
+              (record_assignments
+                (field_assignment
+                  (field_name)
+                  (expr
+                    (lambda
+                      (untyped_binding
+                        (bid))
+                      (expr
+                        (let
+                          (open
+                            (module_name
+                              (qid)))
+                          (expr
+                            (atom
+                              (qid))
+                            (atom
+                              (qid))))))))))))))))
+
+==================
+nested let in let in body with multi-line continuation
+==================
+
+module T where
+f = let α = a in let β = b in begin
+  x ≈⟨ y ⟩
+  z
+
+---
+
+(source_file
+  (module
+    (module_name
+      (qid)))
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (let
+          (function
+            (lhs
+              (atom
+                (qid)))
+            (rhs
+              (expr
+                (atom
+                  (qid)))))
+          (expr
+            (let
+              (function
+                (lhs
+                  (atom
+                    (qid)))
+                (rhs
+                  (expr
+                    (atom
+                      (qid)))))
+              (expr
+                (atom
+                  (qid))
+                (atom
+                  (qid))
+                (atom
+                  (qid))
+                (atom
+                  (qid))
+                (atom
+                  (qid))
+                (atom
+                  (qid))))))))))
+
+==================
+let-in body with same-line where followed by another decl with where containing open and signature
+==================
+
+module T where
+foo = let x = a in
+  y ∎ where open ℤ
+
+bar : T
+bar = m
+  where
+  open ℤ
+  m : T
+
+abc : T
+
+---
+
+(source_file
+  (module
+    (module_name
+      (qid)))
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (let
+          (function
+            (lhs
+              (atom
+                (qid)))
+            (rhs
+              (expr
+                (atom
+                  (qid)))))
+          (expr
+            (atom
+              (qid))
+            (atom
+              (qid))))))
+    (where
+      (open
+        (module_name
+          (qid)))))
+  (function
+    (lhs
+      (function_name
+        (atom
+          (qid))))
+    (rhs
+      (expr
+        (atom
+          (qid)))))
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (atom
+          (qid))))
+    (where
+      (open
+        (module_name
+          (qid)))
+      (function
+        (lhs
+          (function_name
+            (atom
+              (qid))))
+        (rhs
+          (expr
+            (atom
+              (qid)))))))
+  (function
+    (lhs
+      (function_name
+        (atom
+          (qid))))
+    (rhs
+      (expr
+        (atom
+          (qid))))))
+
+==================
+let-in inside function body followed by sibling declaration
+==================
+
+module M where
+  foo s = let a = run s in k a
+  bar = baz
+
+---
+
+(source_file
+  (module
+    (module_name
+      (qid))
+    (function
+      (lhs
+        (atom
+          (qid))
+        (atom
+          (qid)))
+      (rhs
+        (expr
+          (let
+            (function
+              (lhs
+                (atom
+                  (qid)))
+              (rhs
+                (expr
+                  (atom
+                    (qid))
+                  (atom
+                    (qid)))))
+            (expr
+              (atom
+                (qid))
+              (atom
+                (qid)))))))
+    (function
+      (lhs
+        (atom
+          (qid)))
+      (rhs
+        (expr
+          (atom
+            (qid)))))))
+
+==================
+Multiline let with in on last binding line
+==================
+
+f = g
+  where
+    h cs = let
+      a = x
+      b = y in c a b
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (atom
+          (qid))))
+    (where
+      (function
+        (lhs
+          (atom
+            (qid))
+          (atom
+            (qid)))
+        (rhs
+          (expr
+            (let
+              (function
+                (lhs
+                  (atom
+                    (qid)))
+                (rhs
+                  (expr
+                    (atom
+                      (qid)))))
+              (function
+                (lhs
+                  (atom
+                    (qid)))
+                (rhs
+                  (expr
+                    (atom
+                      (qid)))))
+              (expr
+                (atom
+                  (qid))
+                (atom
+                  (qid))
+                (atom
+                  (qid))))))))))
+
+==================
+Telescope multi line I
+==================
+
+f x = let y = x
+          y = x in
+     let y = x in y
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid))
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (let
+          (function
+            (lhs
+              (atom
+                (qid)))
+            (rhs
+              (expr
+                (atom
+                  (qid)))))
+          (function
+            (lhs
+              (atom
+                (qid)))
+            (rhs
+              (expr
+                (atom
+                  (qid)))))
+          (expr
+            (let
+              (function
+                (lhs
+                  (atom
+                    (qid)))
+                (rhs
+                  (expr
+                    (atom
+                      (qid)))))
+              (expr
+                (atom
+                  (qid))))))))))

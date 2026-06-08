@@ -1,40 +1,58 @@
 ==================
-Line comment
+Block comment with double-dash before closing delimiter
 ==================
 
--- this is a line comment
---this is a line comment
---- this is a line comment
-----this is a line comment
-----------------------------------------------------------this is a line comment
+{-- postulate
+--}
+module M where
 
 ---
 
 (source_file
-    (comment)
-    (comment)
-    (comment)
-    (comment)
-    (comment))
+  (block_comment)
+  (module
+    (module_name (qid))))
 
 ==================
-Block comment
+Block comment containing pragma
 ==================
 
-{- this is a block comment -}
-{-# TERMINATING #-}
-{- this is a
-    block comment
+{-
+{-# OPTIONS --allow-unsolved-metas #-}
 -}
-{- this is a
-    block comment -}
-{--}
+module M where
 
 ---
 
 (source_file
-    (comment)
-    (pragma)
-    (comment)
-    (comment)
-    (comment))
+  (block_comment)
+  (module
+    (module_name (qid))))
+
+==================
+Block comment containing multiple pragmas
+==================
+
+{- {-# OPTIONS --foo #-} and {-# OPTIONS --bar #-} -}
+module N where
+
+---
+
+(source_file
+  (block_comment)
+  (module
+    (module_name (qid))))
+
+==================
+Line comment containing supplementary Unicode character
+==================
+
+module M where
+-- 𝒞 is a category
+
+---
+
+(source_file
+  (module
+    (module_name (qid)))
+  (comment))

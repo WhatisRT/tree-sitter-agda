@@ -43,3 +43,47 @@ field a : A
             (expr (atom (qid))))
         (signature (field_name)
             (expr (atom (qid))))))
+
+==================
+Instance field {{name}} : Type
+==================
+
+record R : Set where
+  field
+    {{foo}} : A
+    bar : B
+
+---
+
+(source_file
+  (record
+    (record_name (qid))
+    (expr (atom (SetN)))
+    (record_declarations_block
+      (fields
+        (signature (field_name)
+          (expr (atom (qid))))
+        (signature (field_name)
+          (expr (atom (qid))))))))
+
+==================
+`to` is a valid field name (only a keyword inside `renaming`)
+==================
+
+record Convertible (A B : Set) : Set where
+  field to   : A → B
+        from : B → A
+
+---
+
+(source_file
+  (record
+    (record_name (qid))
+    (typed_binding (atom (qid)) (atom (qid)) (expr (atom (SetN))))
+    (expr (atom (SetN)))
+    (record_declarations_block
+      (fields
+        (signature (field_name)
+          (expr (atom (qid)) (expr (atom (qid)))))
+        (signature (field_name)
+          (expr (atom (qid)) (expr (atom (qid)))))))))

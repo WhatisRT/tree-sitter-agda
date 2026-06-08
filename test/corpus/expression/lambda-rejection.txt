@@ -1,0 +1,15 @@
+==================
+Lambda binding without arrow or absurd is rejected
+==================
+
+f = λ x
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid))))
+  (ERROR
+    (id)))

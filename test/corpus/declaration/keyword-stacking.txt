@@ -1,0 +1,296 @@
+==================
+Private variable (basic)
+==================
+
+private variable
+  A : Set
+
+---
+
+(source_file
+  (private
+    (generalize
+      (signature
+        (field_name)
+        (expr (atom (SetN)))))))
+
+==================
+Private variable followed by declaration
+==================
+
+private variable
+  A : Set
+
+f : A
+
+---
+
+(source_file
+  (private
+    (generalize
+      (signature
+        (field_name)
+        (expr (atom (SetN))))))
+  (function
+    (lhs (function_name (atom (qid))))
+    (rhs (expr (atom (qid))))))
+
+==================
+Private variable multiple sigs followed by declaration
+==================
+
+private variable
+  A B : Set
+
+f : A
+
+---
+
+(source_file
+  (private
+    (generalize
+      (signature
+        (field_name)
+        (field_name)
+        (expr (atom (SetN))))))
+  (function
+    (lhs (function_name (atom (qid))))
+    (rhs (expr (atom (qid))))))
+
+==================
+Postulate instance (basic)
+==================
+
+postulate instance
+  f : Set
+
+---
+
+(source_file
+  (postulate
+    (instance
+      (function
+        (lhs (function_name (atom (qid))))
+        (rhs (expr (atom (SetN))))))))
+
+==================
+Postulate instance followed by declaration
+==================
+
+postulate instance
+  f : Set
+
+g : Set
+
+---
+
+(source_file
+  (postulate
+    (instance
+      (function
+        (lhs (function_name (atom (qid))))
+        (rhs (expr (atom (SetN)))))))
+  (function
+    (lhs (function_name (atom (qid))))
+    (rhs (expr (atom (SetN))))))
+
+==================
+Instance postulate (basic)
+==================
+
+instance postulate
+  f : Set
+
+---
+
+(source_file
+  (instance
+    (postulate
+      (function
+        (lhs (function_name (atom (qid))))
+        (rhs (expr (atom (SetN))))))))
+
+==================
+Instance postulate followed by declaration
+==================
+
+instance postulate
+  f : Set
+
+g : Set
+
+---
+
+(source_file
+  (instance
+    (postulate
+      (function
+        (lhs (function_name (atom (qid))))
+        (rhs (expr (atom (SetN)))))))
+  (function
+    (lhs (function_name (atom (qid))))
+    (rhs (expr (atom (SetN))))))
+
+==================
+Private instance (basic)
+==================
+
+private instance
+  f : Set
+
+---
+
+(source_file
+  (private
+    (instance
+      (function
+        (lhs (function_name (atom (qid))))
+        (rhs (expr (atom (SetN))))))))
+
+==================
+Private instance followed by declaration
+==================
+
+private instance
+  f : Set
+
+g : Set
+
+---
+
+(source_file
+  (private
+    (instance
+      (function
+        (lhs (function_name (atom (qid))))
+        (rhs (expr (atom (SetN)))))))
+  (function
+    (lhs (function_name (atom (qid))))
+    (rhs (expr (atom (SetN))))))
+
+==================
+Abstract record (basic)
+==================
+
+abstract record Foo : Set where
+  field
+    x : Set
+
+---
+
+(source_file
+  (abstract
+    (record
+      (record_name (qid))
+      (expr (atom (SetN)))
+      (record_declarations_block
+        (fields
+          (signature
+            (field_name)
+            (expr (atom (SetN)))))))))
+
+==================
+Abstract record followed by declaration
+==================
+
+abstract record Foo : Set where
+  field
+    x : Set
+
+f : Set
+
+---
+
+(source_file
+  (abstract
+    (record
+      (record_name (qid))
+      (expr (atom (SetN)))
+      (record_declarations_block
+        (fields
+          (signature
+            (field_name)
+            (expr (atom (SetN))))))))
+  (function
+    (lhs (function_name (atom (qid))))
+    (rhs (expr (atom (SetN))))))
+
+==================
+Module where postulate (basic)
+==================
+
+module X where postulate
+  f : Set
+
+---
+
+(source_file
+  (module
+    (module_name (qid))
+    (postulate
+      (function
+        (lhs (function_name (atom (qid))))
+        (rhs (expr (atom (SetN))))))))
+
+==================
+Module where postulate followed by declaration
+==================
+
+module X where postulate
+  f : Set
+
+g : Set
+
+---
+
+(source_file
+  (module
+    (module_name (qid))
+    (postulate
+      (function
+        (lhs (function_name (atom (qid))))
+        (rhs (expr (atom (SetN)))))))
+  (function
+    (lhs (function_name (atom (qid))))
+    (rhs (expr (atom (SetN))))))
+
+==================
+Data where instance (basic)
+==================
+
+data D : Set where instance
+  yes : D
+
+---
+
+(source_file
+  (data
+    (data_name)
+    (expr (atom (SetN)))
+    (instance
+      (function
+        (lhs (function_name (atom (qid))))
+        (rhs (expr (atom (qid))))))))
+
+==================
+Data where instance followed by declaration
+==================
+
+data D : Set where instance
+  yes : D
+
+f : Set
+
+---
+
+(source_file
+  (data
+    (data_name)
+    (expr (atom (SetN)))
+    (instance
+      (function
+        (lhs (function_name (atom (qid))))
+        (rhs (expr (atom (qid)))))))
+  (function
+    (lhs (function_name (atom (qid))))
+    (rhs (expr (atom (SetN))))))

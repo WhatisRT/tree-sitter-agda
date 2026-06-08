@@ -21,3 +21,72 @@ private
         (expr (atom (qid)) (atom (qid)))))
   )
 )
+
+==========================================
+private with nested lambda-where does not swallow next declaration
+==========================================
+
+module M where
+
+private
+  f : Set
+  f =
+    case x of λ where
+      y →
+        case z of λ where
+          w → w
+
+module N = M
+
+---
+
+(source_file
+  (module
+    (module_name
+      (qid)))
+  (private
+    (function
+      (lhs
+        (function_name
+          (atom
+            (qid))))
+      (rhs
+        (expr
+          (atom
+            (SetN)))))
+    (function
+      (lhs
+        (atom
+          (qid)))
+      (rhs
+        (expr
+          (atom
+            (qid))
+          (atom
+            (qid))
+          (atom
+            (qid))
+          (lambda
+            (lambda_clause
+              (atom
+                (qid))
+              (expr
+                (atom
+                  (qid))
+                (atom
+                  (qid))
+                (atom
+                  (qid))
+                (lambda
+                  (lambda_clause
+                    (atom
+                      (qid))
+                    (expr
+                      (atom
+                        (qid))))))))))))
+  (module_macro
+    (module_name
+      (qid))
+    (module_application
+      (module_name
+        (qid)))))

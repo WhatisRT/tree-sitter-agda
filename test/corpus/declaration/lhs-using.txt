@@ -1,0 +1,82 @@
+==================
+LHS with using (left-arrow assignment)
+==================
+
+f n using 2n ← n + n = body
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid))
+      (atom
+        (qid))
+      (using_clause
+        (expr
+          (atom
+            (qid)))
+        (expr
+          (atom
+            (qid))
+          (atom
+            (qid))
+          (atom
+            (qid))
+          (expr
+            (atom
+              (qid))))))))
+
+==================
+LHS with using (ASCII left-arrow)
+==================
+
+f n using 2n <- n + n = body
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid))
+      (atom
+        (qid))
+      (using_clause
+        (expr
+          (atom
+            (qid)))
+        (expr
+          (atom
+            (qid))
+          (atom
+            (qid))
+          (atom
+            (qid))
+          (expr
+            (atom
+              (qid))))))))
+
+==================
+LHS with using missing left-arrow is rejected
+==================
+
+f x using p = x
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid))
+      (atom
+        (qid))))
+  (ERROR
+    (expr
+      (atom
+        (qid))
+      (expr
+        (atom
+          (qid))))))

@@ -64,3 +64,24 @@ a = record { MyRecord old; a = 0; c = 5}
                 (module_assignment (module_name (qid)) (atom (qid)))
                 (field_assignment (field_name) (expr (atom (qid))))
                 (field_assignment (field_name) (expr (atom (qid))))))))))
+
+==================
+Named record update with where
+==================
+
+f = record r where
+  x = 1
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (atom
+          (record_assignments
+            (qid)
+            (function
+              (lhs (atom (qid)))
+              (rhs (expr (atom (qid)))))))))))

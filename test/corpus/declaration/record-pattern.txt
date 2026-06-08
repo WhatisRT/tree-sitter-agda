@@ -1,0 +1,53 @@
+==================
+Record with pattern directive
+==================
+
+record R : Set where
+    pattern
+    field x : Set
+
+---
+
+(source_file
+  (record
+    (record_name
+      (qid))
+    (expr
+      (atom
+        (SetN)))
+    (record_declarations_block
+      (record_pattern)
+      (fields
+        (signature
+          (field_name)
+          (expr
+            (atom
+              (SetN))))))))
+
+==================
+Record with pattern and no-eta
+==================
+
+record R : Set where
+    no-eta-equality
+    pattern
+    field x : Set
+
+---
+
+(source_file
+  (record
+    (record_name
+      (qid))
+    (expr
+      (atom
+        (SetN)))
+    (record_declarations_block
+      (record_eta)
+      (record_pattern)
+      (fields
+        (signature
+          (field_name)
+          (expr
+            (atom
+              (SetN))))))))

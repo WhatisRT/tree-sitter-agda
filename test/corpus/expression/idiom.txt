@@ -1,0 +1,48 @@
+==================
+Idiom brackets with expression
+==================
+
+f = (| x |)
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (atom
+          (expr
+            (atom (qid))))))))
+
+==================
+Idiom brackets with unicode delimiters
+==================
+
+f = ⦇ x ⦈
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (atom
+          (expr
+            (atom (qid))))))))
+
+==================
+Empty idiom brackets
+==================
+
+f = (|)
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (atom)))))

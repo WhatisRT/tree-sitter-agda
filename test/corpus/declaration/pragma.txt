@@ -4,7 +4,7 @@ Pragmas
 
 {-# NON_TERMINATING #-}
 {-# OPTIONS --type-in-type #-}
-{-# IMPORT "something" #-}
+{-# FOREIGN GHC import qualified Data.Map #-}
 {-# CATCHALL #-}
 {-# NO_POSITIVITY_CHECK #-}
 
@@ -16,3 +16,31 @@ Pragmas
     (pragma)
     (pragma)
     (pragma))
+
+==================
+Multi-line FOREIGN GHC pragma
+==================
+
+{-# FOREIGN GHC
+  import Data.Map (Map)
+  import Data.Set (Set)
+#-}
+
+---
+
+(source_file
+  (pragma))
+
+==================
+FOREIGN GHC pragma with nested language pragmas
+==================
+
+{-# FOREIGN GHC
+  {-# LANGUAGE DeriveGeneric #-}
+  {-# LANGUAGE DeriveFunctor #-}
+#-}
+
+---
+
+(source_file
+  (pragma))

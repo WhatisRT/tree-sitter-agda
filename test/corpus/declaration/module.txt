@@ -8,8 +8,11 @@ module Test.Simple where
 ---
 
 (source_file
-    (module (module_name (qid))
-        (module (module_name))))
+  (module
+    (module_name
+      (qid))
+    (module
+      (module_name))))
 
 ==================
 Parameterized
@@ -20,12 +23,23 @@ module Test.Simple (A : Set) {B : _} where
 ---
 
 (source_file
-    (module (module_name (qid))
-        (typed_binding (atom (qid)) (expr (atom (SetN))))
-        (typed_binding (atom (qid)) (expr (atom)))))
+  (module
+    (module_name
+      (qid))
+    (typed_binding
+      (atom
+        (qid))
+      (expr
+        (atom
+          (SetN))))
+    (typed_binding
+      (atom
+        (qid))
+      (expr
+        (atom)))))
 
 ==================
-Open as
+`open M as N` parses `as N` as module arguments (no as-clause on plain open)
 ==================
 
 open A as B
@@ -33,7 +47,13 @@ open A as B
 ---
 
 (source_file
-    (open (module_name (qid)) (atom (qid)) (atom (qid))))
+  (open
+    (module_name
+      (qid))
+    (atom
+      (qid))
+    (atom
+      (qid))))
 
 ==================
 Open with directives
@@ -45,51 +65,700 @@ open import A b c public using (a; module C) hiding (xs) renaming (module ys to 
 ---
 
 (source_file
-    (open
-        (import (module_name (qid)))
-        (atom (qid)) (atom (qid))
-        (import_directive)
-        (import_directive (id) (id))
-        (import_directive (id))
-        (import_directive
-            (renaming (id) (id))
-            (renaming (id) (id)))
-        (import_directive)
-        (import_directive)
-        (import_directive)))
+  (open
+    (import
+      (module_name
+        (qid)))
+    (atom
+      (qid))
+    (atom
+      (qid))
+    (import_directive)
+    (import_directive
+      (id)
+      (id))
+    (import_directive
+      (id))
+    (import_directive
+      (renaming
+        (id)
+        (id))
+      (renaming
+        (id)
+        (id)))
+    (import_directive)
+    (import_directive)
+    (import_directive)))
+
+==================
+Import as
+==================
+
+import A as B
+
+---
+
+(source_file
+  (import
+    (module_name
+      (qid))
+    (as_clause
+      (module_name
+        (qid)))))
+
+==================
+Import with directives
+==================
+
+import A b c as B using (a) hiding (xs) renaming (ys to zs)
+
+---
+
+(source_file
+  (import
+    (module_name
+      (qid))
+    (atom
+      (qid))
+    (atom
+      (qid))
+    (as_clause
+      (module_name
+        (qid)))
+    (import_directive
+      (id))
+    (import_directive
+      (id))
+    (import_directive
+      (renaming
+        (id)
+        (id)))))
+
+==================
+Let-binding in module telescope
+==================
+
+module M (x : A) (let open N x) where
+
+---
+
+(source_file
+  (module
+    (module_name
+      (qid))
+    (typed_binding
+      (atom
+        (qid))
+      (expr
+        (atom
+          (qid))))
+    (typed_binding
+      (open
+        (module_name
+          (qid))
+        (atom
+          (qid))))))
+
+==================
+Two let-bindings in module telescope
+==================
+
+module M (let open A) (let open B) where
+
+---
+
+(source_file
+  (module
+    (module_name
+      (qid))
+    (typed_binding
+      (open
+        (module_name
+          (qid))))
+    (typed_binding
+      (open
+        (module_name
+          (qid))))))
+
+==================
+Mixed typed and let-bindings in module telescope
+==================
+
+module M (x : A) (let open N x) (y : B) where
+
+---
+
+(source_file
+  (module
+    (module_name
+      (qid))
+    (typed_binding
+      (atom
+        (qid))
+      (expr
+        (atom
+          (qid))))
+    (typed_binding
+      (open
+        (module_name
+          (qid))
+        (atom
+          (qid))))
+    (typed_binding
+      (atom
+        (qid))
+      (expr
+        (atom
+          (qid))))))
 
 ==================
 Module macros
 ==================
 
-module Sort.Nat (A : Set) = Sort Nat
+module SortNat (A : Set) = Sort Nat
 
-open module Nat (A : Set) = Sort {{ ... }}
+open module Nat (A : Set) = Sort
 
 ---
 
 (source_file
-    (module_macro
-        (module_name (qid)) (typed_binding (atom (qid)) (expr (atom (SetN))))
-        (module_application (module_name (qid)) (atom (qid))))
-    (module_macro
-        (module_name (qid)) (typed_binding (atom (qid)) (expr (atom (SetN))))
-        (module_application (module_name (qid)))))
+  (module_macro
+    (module_name
+      (qid))
+    (typed_binding
+      (atom
+        (qid))
+      (expr
+        (atom
+          (SetN))))
+    (module_application
+      (module_name
+        (qid))
+      (atom
+        (qid))))
+  (module_macro
+    (module_name
+      (qid))
+    (typed_binding
+      (atom
+        (qid))
+      (expr
+        (atom
+          (SetN))))
+    (module_application
+      (module_name
+        (qid)))))
 
 ==================
 Module macros (Unicode)
 ==================
 
-module Sort.Nat (A : Set) = Sort ℕ
+module SortNat (A : Set) = Sort ℕ
 
-open module Nat (A : Set) = Sort ⦃ … ⦄
+open module Nat (A : Set) = Sort
 
 ---
 
 (source_file
-    (module_macro
-        (module_name (qid)) (typed_binding (atom (qid)) (expr (atom (SetN))))
-        (module_application (module_name (qid)) (atom (qid))))
-    (module_macro
-        (module_name (qid)) (typed_binding (atom (qid)) (expr (atom (SetN))))
-        (module_application (module_name (qid)))))
+  (module_macro
+    (module_name
+      (qid))
+    (typed_binding
+      (atom
+        (qid))
+      (expr
+        (atom
+          (SetN))))
+    (module_application
+      (module_name
+        (qid))
+      (atom
+        (qid))))
+  (module_macro
+    (module_name
+      (qid))
+    (typed_binding
+      (atom
+        (qid))
+      (expr
+        (atom
+          (SetN))))
+    (module_application
+      (module_name
+        (qid)))))
+
+==================
+Semicolon-separated open statements
+==================
+
+open A ; open B
+
+---
+
+(source_file
+  (open
+    (module_name
+      (qid)))
+  (open
+    (module_name
+      (qid))))
+
+==================
+Module with instance telescope containing double braces
+==================
+
+module M {a} ⦃ p : P {{x}} ⦄ where
+  module _ where
+    f = g
+
+---
+
+(source_file
+  (module
+    (module_name
+      (qid))
+    (untyped_binding
+      (atom
+        (qid)))
+    (typed_binding
+      (atom
+        (qid))
+      (expr
+        (atom
+          (qid))
+        (atom
+          (expr
+            (atom
+              (qid))))))
+    (module
+      (module_name)
+      (function
+        (lhs
+          (atom
+            (qid)))
+        (rhs
+          (expr
+            (atom
+              (qid))))))))
+
+==================
+Inline comment after where keyword
+==================
+
+module M where  -- inline comment
+  f = g
+  h = i
+
+---
+
+(source_file
+  (module
+    (module_name
+      (qid))
+    (comment)
+    (function
+      (lhs
+        (atom
+          (qid)))
+      (rhs
+        (expr
+          (atom
+            (qid)))))
+    (function
+      (lhs
+        (atom
+          (qid)))
+      (rhs
+        (expr
+          (atom
+            (qid)))))))
+
+==================
+Open with renaming continuation inside inline where module
+==================
+
+f = g
+    where module Go x where
+    open A B
+        renaming (c to c')
+    y = z
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (atom
+          (qid))))
+    (where
+      (module
+        (module_name
+          (qid))
+        (untyped_binding
+          (bid))
+        (open
+          (module_name
+            (qid))
+          (atom
+            (qid))
+          (import_directive
+            (renaming
+              (id)
+              (id))))
+        (function
+          (lhs
+            (atom
+              (qid)))
+          (rhs
+            (expr
+              (atom
+                (qid)))))))))
+
+==================
+Let open with renaming in module telescope
+==================
+
+module M (x : A) (let open N x renaming (a to b)) where
+
+---
+
+(source_file
+  (module
+    (module_name
+      (qid))
+    (typed_binding
+      (atom
+        (qid))
+      (expr
+        (atom
+          (qid))))
+    (typed_binding
+      (open
+        (module_name
+          (qid))
+        (atom
+          (qid))
+        (import_directive
+          (renaming
+            (id)
+            (id)))))))
+
+==================
+Multiple let opens in module telescope paren
+==================
+
+module M (let open X renaming (a to b) ; open Y) where
+
+---
+
+(source_file
+  (module
+    (module_name
+      (qid))
+    (typed_binding
+      (open
+        (module_name
+          (qid))
+        (import_directive
+          (renaming
+            (id)
+            (id))))
+      (open
+        (module_name
+          (qid))))))
+
+==================
+Erased module (@0)
+==================
+
+module @0 M where
+  x = y
+
+---
+
+(source_file
+  (module
+    (attributes
+      (attribute
+        (qid)))
+    (module_name
+      (qid))
+    (function
+      (lhs
+        (atom
+          (qid)))
+      (rhs
+        (expr
+          (atom
+            (qid)))))))
+
+==================
+Erased module macro (@0)
+==================
+
+module @0 M = N
+
+open module @0 M = N public
+
+---
+
+(source_file
+  (module_macro
+    (attributes
+      (attribute
+        (qid)))
+    (module_name
+      (qid))
+    (module_application
+      (module_name
+        (qid))))
+  (module_macro
+    (attributes
+      (attribute
+        (qid)))
+    (module_name
+      (qid))
+    (module_application
+      (module_name
+        (qid)))
+    (import_directive)))
+
+==================
+Import as underscore
+==================
+
+open import Foo as _
+
+---
+
+(source_file
+  (open
+    (import
+      (module_name
+        (qid)))
+    (as_clause
+      (module_name))))
+
+==================
+Import as qualified name
+==================
+
+import A as Bar.Baz
+
+---
+
+(source_file
+  (import
+    (module_name
+      (qid))
+    (as_clause
+      (module_name
+        (qid)))))
+
+==================
+Erased where-submodule (@0 _)
+==================
+
+f = x
+  module @0 _ where
+    x = 1
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (atom
+          (qid))))
+    (where
+      (attributes
+        (attribute
+          (qid)))
+      (bid)
+      (function
+        (lhs
+          (atom
+            (qid)))
+        (rhs
+          (expr
+            (atom
+              (qid))))))))
+
+==================
+Import followed by abstract does not confuse AS_RENAME
+==================
+
+import A.B
+
+abstract
+  f = x
+
+---
+
+(source_file
+  (import
+    (module_name
+      (qid)))
+  (abstract
+    (function
+      (lhs
+        (atom
+          (qid)))
+      (rhs
+        (expr
+          (atom
+            (qid)))))))
+
+==================
+where block with module alias with explicit param then open
+==================
+
+f : A
+f = x
+  where module m X = F X
+        open m
+
+---
+
+(source_file
+  (function
+    (lhs
+      (function_name
+        (atom
+          (qid))))
+    (rhs
+      (expr
+        (atom
+          (qid)))))
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (atom
+          (qid))))
+    (where
+      (module_macro
+        (module_name
+          (qid))
+        (untyped_binding
+          (bid))
+        (module_application
+          (module_name
+            (qid))
+          (atom
+            (qid))))
+      (open
+        (module_name
+          (qid))))))
+
+==================
+where block with module alias with implicit param then open
+==================
+
+g : A
+g = y
+  where module i {X} = Iso (iso X)
+        open i
+
+---
+
+(source_file
+  (function
+    (lhs
+      (function_name
+        (atom
+          (qid))))
+    (rhs
+      (expr
+        (atom
+          (qid)))))
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (atom
+          (qid))))
+    (where
+      (module_macro
+        (module_name
+          (qid))
+        (untyped_binding
+          (atom
+            (qid)))
+        (module_application
+          (module_name
+            (qid))
+          (atom
+            (expr
+              (atom
+                (qid))
+              (atom
+                (qid))))))
+      (open
+        (module_name
+          (qid))))))
+
+==================
+private block with two declarations after let-open inside record
+==================
+
+module T where
+module M where
+  X : Set
+  X = record
+    { f = λ x →
+      let open S
+      in x
+    ; g = λ y → y
+    }
+module N where
+  private
+    module A = M
+    module B = M.X
+  Foo : Set
+  Foo = Set
+
+---
+
+(source_file
+  (module (module_name (qid)))
+  (module
+    (module_name (qid))
+    (function (lhs (function_name (atom (qid)))) (rhs (expr (atom (SetN)))))
+    (function
+      (lhs (atom (qid)))
+      (rhs
+        (expr
+          (atom
+            (record_assignments
+              (field_assignment
+                (field_name)
+                (expr
+                  (lambda
+                    (untyped_binding (bid))
+                    (expr
+                      (let
+                        (open (module_name (qid)))
+                        (expr (atom (qid))))))))
+              (field_assignment
+                (field_name)
+                (expr (lambda (untyped_binding (bid)) (expr (atom (qid))))))))))))
+  (module
+    (module_name (qid))
+    (private
+      (module_macro (module_name (qid)) (module_application (module_name (qid))))
+      (module_macro (module_name (qid)) (module_application (module_name (qid)))))
+    (function (lhs (function_name (atom (qid)))) (rhs (expr (atom (SetN)))))
+    (function (lhs (atom (qid))) (rhs (expr (atom (SetN)))))))

@@ -64,7 +64,7 @@ Typed bindings
 ==================
 
 f : (A : Set) (B : Set) (C : Set) -> A
-g : (A B _ ? : Set) -> A
+g : (A B _ : Set) -> A
 
 ---
 
@@ -85,7 +85,6 @@ g : (A B _ ? : Set) -> A
                 (atom (qid))
                 (atom (qid))
                 (atom)
-                (atom (qid))
                 (expr (atom (SetN))))
             (expr (atom (qid)))))))
 
@@ -140,6 +139,53 @@ f a with g a
             (expr (atom)))))
 
 ==================
+Two string literals in the same application
+==================
+
+f = g "a" (h "b")
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (atom (qid))
+        (atom (literal (string)))
+        (atom (expr
+          (atom (qid))
+          (atom (literal (string)))))))))
+
+==================
+With-expression on indented next line (top-level indented declarations)
+==================
+
+ f x = a
+ f x
+   with g x
+ ... | yes y = h y
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)) (atom (qid)))
+    (rhs (expr (atom (qid)))))
+  (function
+    (lhs
+      (atom (qid))
+      (atom (qid))
+      (with_expressions
+        (expr (atom (qid)) (atom (qid))))))
+  (function
+    (lhs
+      (atom)
+      (atom (qid))
+      (atom (qid)))
+    (rhs (expr (atom (qid)) (atom (qid))))))
+
+==================
 Idiom brackets
 ==================
 
@@ -187,3 +233,346 @@ x = ⦇ if a then b else c ⦈
             (atom (qid))
             (atom (qid))
             (atom (qid))))))))
+
+==================
+Continuation-line record pattern arguments
+==================
+
+f-trans record { a = refl }
+        record { a = refl }
+  = refl
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom (qid))
+      (atom (record_assignments (field_assignment (field_name) (expr (atom (qid))))))
+      (atom (record_assignments (field_assignment (field_name) (expr (atom (qid)))))))
+    (rhs (expr (atom (qid))))))
+
+==================
+With-expression and inspect followed by additional with-subject
+==================
+
+f xs with foo xs in eq | xs
+... | true | x = x
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom (qid))
+      (atom (qid))
+      (with_expressions
+        (expr (atom (qid)) (atom (qid)))
+        (id)
+        (expr (atom (qid))))))
+  (function
+    (lhs
+      (atom)
+      (atom (qid))
+      (atom (qid)))
+    (rhs (expr (atom (qid))))))
+
+==================
+Inline where-clause with multiline lambda-where RHS followed by sibling declaration
+==================
+
+foo = bar where
+  go = λ where
+    x → x
+
+baz : Set
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs (expr (atom (qid))))
+    (where
+      (function
+        (lhs (atom (qid)))
+        (rhs
+          (expr
+            (lambda
+              (lambda_clause
+                (atom (qid))
+                (expr (atom (qid))))))))))
+  (function
+    (lhs (function_name (atom (qid))))
+    (rhs (expr (atom (SetN))))))
+
+==================
+Same-line inline where with multiline lambda-where followed by comment then sibling
+==================
+
+module M where
+  foo = bar where go = λ where
+    x → x
+  -- comment
+  baz : Set
+  baz = a
+
+---
+
+(source_file
+  (module
+    (module_name (qid))
+    (function
+      (lhs (atom (qid)))
+      (rhs (expr (atom (qid))))
+      (where
+        (function
+          (lhs (atom (qid)))
+          (rhs
+            (expr
+              (lambda
+                (lambda_clause
+                  (atom (qid))
+                  (expr (atom (qid))))))))
+        (comment)))
+    (function
+      (lhs (function_name (atom (qid))))
+      (rhs (expr (atom (SetN)))))
+    (function
+      (lhs (atom (qid)))
+      (rhs (expr (atom (qid)))))))
+
+================================================================================
+Inline lambda-where in a signature with indented comment then a with-clause sibling
+================================================================================
+
+inj : A
+  → Σ B λ where refl → z
+  -- a comment
+inj refl = d
+
+g x with k x
+... | y = y
+
+---
+
+(source_file
+  (function
+    (lhs (function_name (atom (qid))))
+    (rhs
+      (expr
+        (atom (qid))
+        (expr
+          (atom (qid))
+          (atom (qid))
+          (lambda
+            (lambda_clause
+              (atom (qid))
+              (expr (atom (qid))))
+            (comment))))))
+  (function
+    (lhs
+      (atom (qid))
+      (atom (qid)))
+    (rhs (expr (atom (qid)))))
+  (function
+    (lhs
+      (atom (qid))
+      (atom (qid))
+      (with_expressions
+        (expr
+          (atom (qid))
+          (atom (qid))))))
+  (function
+    (lhs
+      (atom)
+      (atom (qid)))
+    (rhs (expr (atom (qid))))))
+
+================================================================================
+Nested where blocks with non-inline inner body and sibling at outer level
+================================================================================
+
+module M where
+
+  foo = Set
+    where helper : Set
+          helper = Set
+            where
+              x = Set
+
+  module bar = bar
+
+---
+
+(source_file
+  (module
+    (module_name (qid))
+    (function
+      (lhs (atom (qid)))
+      (rhs (expr (atom (SetN))))
+      (where
+        (function
+          (lhs (function_name (atom (qid))))
+          (rhs (expr (atom (SetN)))))
+        (function
+          (lhs (atom (qid)))
+          (rhs (expr (atom (SetN))))
+          (where
+            (function
+              (lhs (atom (qid)))
+              (rhs (expr (atom (SetN)))))))))
+    (module_macro
+      (module_name (qid))
+      (module_application
+        (module_name (qid))))))
+
+================================================================================
+Where clause after record with let-in body
+================================================================================
+
+foo = record
+  { y = λ f →
+    let z = f
+    in record { a = z }
+  }
+  where open Foo
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (atom
+          (record_assignments
+            (field_assignment
+              (field_name)
+              (expr
+                (lambda
+                  (untyped_binding (bid))
+                  (expr
+                    (let
+                      (function
+                        (lhs (atom (qid)))
+                        (rhs (expr (atom (qid)))))
+                      (expr
+                        (atom
+                          (record_assignments
+                            (field_assignment
+                              (field_name)
+                              (expr (atom (qid))))))))))))))))
+    (where
+      (open (module_name (qid))))))
+
+==================
+do block where clause below do-statement column with let-telescope module
+==================
+
+f : X
+f = do
+    g x
+
+   where module _ (n : Name) (let k = f n) where
+
+    helper : ℕ
+    helper = k
+
+---
+
+(source_file
+  (function
+    (lhs (function_name (atom (qid))))
+    (rhs (expr (atom (qid)))))
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (do
+          (stmt (atom (qid)) (atom (qid))))))
+    (where
+      (module
+        (module_name)
+        (typed_binding
+          (atom (qid))
+          (expr (atom (qid))))
+        (typed_binding
+          (function
+            (lhs (atom (qid)))
+            (rhs (expr (atom (qid)) (atom (qid))))))
+        (function
+          (lhs (function_name (atom (qid))))
+          (rhs (expr (atom (qid)))))
+        (function
+          (lhs (atom (qid)))
+          (rhs (expr (atom (qid)))))))))
+
+==================
+paren-starting-with-minus as first arg to infix operator
+==================
+
+module T where
+_f_ : A → B → C
+(+ n) f x = x
+(-[1+ n ]) f x = x
+
+---
+
+(source_file
+  (module (module_name (qid)))
+  (function
+    (lhs (function_name (atom (qid))))
+    (rhs
+      (expr
+        (atom (qid))
+        (expr (atom (qid)) (expr (atom (qid)))))))
+  (function
+    (lhs
+      (atom (expr (atom (qid)) (atom (qid))))
+      (atom (qid))
+      (atom (qid)))
+    (rhs (expr (atom (qid)))))
+  (function
+    (lhs
+      (atom
+        (expr
+          (atom (qid))
+          (atom (qid))
+          (atom (qid))))
+      (atom (qid))
+      (atom (qid)))
+    (rhs (expr (atom (qid))))))
+
+==================
+function name starting with minus, after record decl
+==================
+
+module T where
+record R : Set where
+  field
+    f : T
+
+-raw : T
+-raw = x
+  where open A
+
+---
+
+(source_file
+  (module (module_name (qid)))
+  (record
+    (record_name (qid))
+    (expr (atom (SetN)))
+    (record_declarations_block
+      (fields
+        (signature
+          (field_name)
+          (expr (atom (qid)))))))
+  (function
+    (lhs (function_name (atom (qid))))
+    (rhs (expr (atom (qid)))))
+  (function
+    (lhs (atom (qid)))
+    (rhs (expr (atom (qid))))
+    (where (open (module_name (qid))))))

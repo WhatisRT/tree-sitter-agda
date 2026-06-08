@@ -1,0 +1,79 @@
+==================
+Extended lambda with erasure attribute
+==================
+
+f = λ @0 { x → x }
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (lambda
+          (attributes
+            (attribute
+              (qid)))
+          (lambda_clause
+            (atom
+              (qid))
+            (expr
+              (atom
+                (qid)))))))))
+
+==================
+Absurd lambda with attribute
+==================
+
+f = λ @0 ()
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (lambda
+          (attributes
+            (attribute
+              (qid))))))))
+
+==================
+Extended lambda with multiple attributes
+==================
+
+f = λ @0 @erased { x → x ; y → y }
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (lambda
+          (attributes
+            (attribute
+              (qid))
+            (attribute
+              (qid)))
+          (lambda_clause
+            (atom
+              (qid))
+            (expr
+              (atom
+                (qid))))
+          (lambda_clause
+            (atom
+              (qid))
+            (expr
+              (atom
+                (qid)))))))))

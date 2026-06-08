@@ -14,3 +14,19 @@ primitive
       (expr (atom (qid)) (expr (atom (qid)))))
   )
 )
+
+==================
+Primitive with attribute
+==================
+
+primitive
+  @0 primShowNat : Nat → String
+
+---
+
+(source_file
+  (primitive
+    (type_signature
+      (attributes (attribute (qid)))
+      (field_name)
+      (expr (atom (qid)) (expr (atom (qid)))))))

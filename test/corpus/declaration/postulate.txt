@@ -15,3 +15,23 @@ postulate
         (expr (atom (qid)) (atom (qid)))))
   )
 )
+
+==================
+Inline comment after postulate keyword
+==================
+
+postulate  -- inline comment
+  f : A
+  g : B
+
+---
+
+(source_file
+  (postulate
+    (comment)
+    (function
+      (lhs (function_name (atom (qid))))
+      (rhs (expr (atom (qid)))))
+    (function
+      (lhs (function_name (atom (qid))))
+      (rhs (expr (atom (qid)))))))

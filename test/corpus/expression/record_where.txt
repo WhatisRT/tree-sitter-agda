@@ -1,0 +1,209 @@
+==================
+Simple record where
+==================
+
+foo = record where
+  x = y
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (atom
+          (record_where_expr
+            (function
+              (lhs (atom (qid)))
+              (rhs (expr (atom (qid)))))))))))
+
+==================
+Empty record where
+==================
+
+foo = record where
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (atom
+          (record_where_expr))))))
+
+==================
+Multi-field record where
+==================
+
+foo = record where
+  fst = x
+  snd = y
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (atom
+          (record_where_expr
+            (function
+              (lhs (atom (qid)))
+              (rhs (expr (atom (qid)))))
+            (function
+              (lhs (atom (qid)))
+              (rhs (expr (atom (qid)))))))))))
+
+==================
+Record where in type signature position
+==================
+
+foo : P
+foo = record where
+
+---
+
+(source_file
+  (function
+    (lhs (function_name (atom (qid))))
+    (rhs (expr (atom (qid)))))
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (atom
+          (record_where_expr))))))
+
+==================
+record where with let-in field followed by sibling declaration
+==================
+
+module T where
+complex : X
+complex = record where it = let _ = Set in A
+
+atomic : X
+atomic = record where it = A
+
+---
+
+(source_file
+  (module (module_name (qid)))
+  (function
+    (lhs (function_name (atom (qid))))
+    (rhs (expr (atom (qid)))))
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (atom
+          (record_where_expr
+            (function
+              (lhs (atom (qid)))
+              (rhs
+                (expr
+                  (let
+                    (function
+                      (lhs (atom))
+                      (rhs (expr (atom (SetN)))))
+                    (expr (atom (qid)))))))))))) 
+  (function
+    (lhs (function_name (atom (qid))))
+    (rhs (expr (atom (qid)))))
+  (function
+    (lhs (atom (qid)))
+    (rhs
+      (expr
+        (atom
+          (record_where_expr
+            (function
+              (lhs (atom (qid)))
+              (rhs (expr (atom (qid)))))))))))
+
+==================
+Record where as record literal
+==================
+
+v = record R where
+    x = a
+    y = b
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (atom
+          (record_assignments
+            (qid)
+            (function
+              (lhs
+                (atom
+                  (qid)))
+              (rhs
+                (expr
+                  (atom
+                    (qid)))))
+            (function
+              (lhs
+                (atom
+                  (qid)))
+              (rhs
+                (expr
+                  (atom
+                    (qid)))))))))))
+
+==================
+Record where for update
+==================
+
+v = record r where
+    x = a
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (atom
+          (record_assignments
+            (qid)
+            (function
+              (lhs
+                (atom
+                  (qid)))
+              (rhs
+                (expr
+                  (atom
+                    (qid)))))))))))
+
+==================
+Empty named record where
+==================
+
+v = record R where
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom
+        (qid)))
+    (rhs
+      (expr
+        (atom
+          (record_assignments
+            (qid)))))))

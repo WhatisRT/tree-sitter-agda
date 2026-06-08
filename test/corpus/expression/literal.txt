@@ -1,0 +1,86 @@
+==================
+String literal
+==================
+
+f = "hello"
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs (expr (atom (literal (string)))))))
+
+==================
+Char literal plain
+==================
+
+f = 'a'
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs (expr (atom (literal (char)))))))
+
+==================
+Char literal newline escape
+==================
+
+f = '\n'
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs (expr (atom (literal (char)))))))
+
+==================
+Char literal hex escape
+==================
+
+f = '\xD800'
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs (expr (atom (literal (char)))))))
+
+==================
+Char literal as function argument
+==================
+
+f '\xFFFD' = a
+f _ = a
+
+---
+
+(source_file
+  (function
+    (lhs
+      (atom (qid))
+      (atom (literal (char))))
+    (rhs (expr (atom (qid)))))
+  (function
+    (lhs
+      (atom (qid))
+      (atom))
+    (rhs (expr (atom (qid))))))
+
+==================
+String literal with multi-line gap
+==================
+
+f = "ab\
+    \cd"
+
+---
+
+(source_file
+  (function
+    (lhs (atom (qid)))
+    (rhs (expr (atom (literal (string)))))))

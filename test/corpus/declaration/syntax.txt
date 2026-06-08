@@ -17,3 +17,21 @@ syntax bind e₁ (λ x → e₂) = x ← e₁ , e₂
     (id)
     (id)
     ))
+
+==================
+Syntax with multi-variable lambda hole
+==================
+
+syntax f (λ x y → C) = f
+
+---
+
+(source_file
+  (syntax
+    (id)
+    (hole_names
+      (hole_name
+        (bid)
+        (bid)
+        (id)))
+    (id)))

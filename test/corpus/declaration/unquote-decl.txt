@@ -1,0 +1,48 @@
+==================
+unquoteDecl data
+==================
+
+unquoteDecl data T = e
+
+---
+
+(source_file
+  (unquote_decl
+    (id)
+    (expr
+      (atom
+        (qid)))))
+
+==================
+unquoteDecl data with constructor
+==================
+
+unquoteDecl data T constructor c = e
+
+---
+
+(source_file
+  (unquote_decl
+    (id)
+    (id)
+    (expr
+      (atom
+        (qid)))))
+
+==================
+unquoteDecl data with multiple constructors
+==================
+
+unquoteDecl data T constructor c₁ c₂ c₃ = e
+
+---
+
+(source_file
+  (unquote_decl
+    (id)
+    (id)
+    (id)
+    (id)
+    (expr
+      (atom
+        (qid)))))

@@ -1,0 +1,239 @@
+==================
+Opaque block
+==================
+
+opaque
+    f : Set
+    f = Set
+
+---
+
+(source_file
+  (opaque
+    (function
+      (lhs
+        (function_name
+          (atom
+            (qid))))
+      (rhs
+        (expr
+          (atom
+            (SetN)))))
+    (function
+      (lhs
+        (atom
+          (qid)))
+      (rhs
+        (expr
+          (atom
+            (SetN)))))))
+
+==================
+Opaque block with inline comment
+==================
+
+opaque  -- inline comment
+    f : Set
+    f = Set
+
+---
+
+(source_file
+  (opaque
+    (comment)
+    (function
+      (lhs
+        (function_name
+          (atom
+            (qid))))
+      (rhs
+        (expr
+          (atom
+            (SetN)))))
+    (function
+      (lhs
+        (atom
+          (qid)))
+      (rhs
+        (expr
+          (atom
+            (SetN)))))))
+
+==================
+Unfolding outside opaque is rejected
+==================
+
+unfolding f g h
+
+---
+
+(source_file
+  (ERROR)
+  (function
+    (lhs
+      (atom
+        (qid))
+      (atom
+        (qid))
+      (atom
+        (qid)))))
+
+==================
+Unfolding not first inside opaque is rejected
+==================
+
+opaque
+    f : Set
+    f = Set
+    unfolding g
+
+---
+
+(source_file
+  (opaque
+    (function
+      (lhs
+        (function_name
+          (atom
+            (qid))))
+      (rhs
+        (expr
+          (atom
+            (SetN)))))
+    (function
+      (lhs
+        (atom
+          (qid)))
+      (rhs
+        (expr
+          (atom
+            (SetN)))))
+    (ERROR)
+    (function
+      (lhs
+        (atom
+          (qid))))))
+
+==================
+Unfolding inside opaque
+==================
+
+opaque
+    unfolding f
+    g : Set
+    g = f
+
+---
+
+(source_file
+  (opaque
+    (unfolding
+      (qid
+        (qid)))
+    (function
+      (lhs
+        (function_name
+          (atom
+            (qid))))
+      (rhs
+        (expr
+          (atom
+            (SetN)))))
+    (function
+      (lhs
+        (atom
+          (qid)))
+      (rhs
+        (expr
+          (atom
+            (qid)))))))
+
+==================
+opaque block with = let body-indented in then copattern where
+==================
+
+opaque
+  f a b
+    = let
+        x = a
+        in  x
+
+  f a b
+    = let
+        x = a
+        in  x
+
+g .G.method a =
+  a
+  where
+    w = v
+
+---
+
+(source_file
+  (opaque
+    (function
+      (lhs
+        (atom (qid))
+        (atom (qid))
+        (atom (qid)))
+      (rhs (expr
+        (let
+          (function
+            (lhs (atom (qid)))
+            (rhs (expr (atom (qid)))))
+          (expr (atom (qid)))))))
+    (function
+      (lhs
+        (atom (qid))
+        (atom (qid))
+        (atom (qid)))
+      (rhs (expr
+        (let
+          (function
+            (lhs (atom (qid)))
+            (rhs (expr (atom (qid)))))
+          (expr (atom (qid))))))))
+  (function
+    (lhs
+      (atom (qid))
+      (atom (atom (qid)))
+      (atom (qid)))
+    (rhs (expr (atom (qid))))
+    (where
+      (function
+        (lhs (atom (qid)))
+        (rhs (expr (atom (qid))))))))
+
+==================
+Multiple unfolding inside opaque
+==================
+
+opaque
+    unfolding f
+    unfolding g
+    unfolding h
+    i : Set
+
+---
+
+(source_file
+  (opaque
+    (unfolding
+      (qid
+        (qid)))
+    (unfolding
+      (qid
+        (qid)))
+    (unfolding
+      (qid
+        (qid)))
+    (function
+      (lhs
+        (function_name
+          (atom
+            (qid))))
+      (rhs
+        (expr
+          (atom
+            (SetN)))))))

@@ -28,7 +28,7 @@ Without body
 
 data Nat : Set where
 
-data Nat : Set where
+data Bool : Set where
 
 ---
 
@@ -37,3 +37,57 @@ data Nat : Set where
       (data_name) (expr (atom (SetN))))
     (data
       (data_name) (expr (atom (SetN)))))
+
+==================
+Anonymous data in interleaved mutual
+==================
+
+interleaved mutual
+  data Even : Nat → Set
+  data Odd  : Nat → Set
+  data _ where
+    even-zero : Even zero
+
+---
+
+(source_file
+  (interleaved_mutual
+    (data_signature
+      (data_name)
+      (expr (atom (qid)) (expr (atom (SetN)))))
+    (data_signature
+      (data_name)
+      (expr (atom (qid)) (expr (atom (SetN)))))
+    (data
+      (data_name)
+      (function
+        (lhs (function_name (atom (qid))))
+        (rhs (expr (atom (qid)) (atom (qid))))))))
+
+==================
+Erased data type (@0)
+==================
+
+data @0 D : Set where
+
+---
+
+(source_file
+  (data
+    (attributes (attribute (qid)))
+    (data_name)
+    (expr (atom (SetN)))))
+
+==================
+Erased data signature (@0)
+==================
+
+data @0 D : Set
+
+---
+
+(source_file
+  (data_signature
+    (attributes (attribute (qid)))
+    (data_name)
+    (expr (atom (SetN)))))
